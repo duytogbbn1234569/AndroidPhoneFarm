@@ -1,0 +1,125 @@
+﻿<Window x:Class="Code.Views.PopupChonThietBiView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Code.Views"
+        mc:Ignorable="d"
+        Title="PopupChonThietBiView" Height="400" Width="400"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True">
+    <Border CornerRadius="10"                    
+        BorderThickness="1">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.7">
+                <GradientStop Color="{StaticResource secondaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource secondaryBackColor1}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock  Text="CHỌN THIẾT BỊ"
+                        HorizontalAlignment="Center"
+                        Grid.Row="0"
+                        Foreground="{StaticResource titleColor2}"
+                        FontSize="20"
+                        FontFamily="Moutserrat"
+                        FontWeight="Medium"
+                        VerticalAlignment="Center"
+                        Margin="10,0,0,0"/>
+            <DataGrid
+                CanUserAddRows="False"
+                CanUserResizeColumns="False"
+                CanUserResizeRows="False"
+                HeadersVisibility="Column"
+                x:Name="dgThietBi"
+                AutoGenerateColumns="False"
+                Background="#200F53"
+                BorderThickness="0"
+                Grid.RowSpan="2"
+                Height="250"
+                SelectionUnit="FullRow"
+                SelectionMode="Single"
+                SelectionChanged="selectThietBi"
+                GridLinesVisibility="None"
+                Margin="20,60,20,0">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#BCBEE0"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="FontFamily" Value="Montserrat"/>
+                        <Setter Property="FontSize" Value="18"/>
+                        <Setter Property="FontWeight" Value="Medium"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#BCBEE0"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="FontFamily" Value="Montserrat"/>
+                        <Setter Property="FontSize" Value="15"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Width="40">
+                        <DataGridCheckBoxColumn.Header>
+                            <CheckBox Name="chkSelectAll" Checked="chkSelectAll_Checked" Unchecked="chkSelectAll_Unchecked"/>
+                        </DataGridCheckBoxColumn.Header>
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn Width="50" Binding="{Binding SoThuTu}" Header="STT" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding MaThietBi}" Header="Mã thiết bị" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Style="{StaticResource controlButton}"
+                        Width="80"
+                        Height="30"
+                        Foreground="White"
+                        Background="{StaticResource color2}"
+                        Content="Thực thi" Margin="99,0,20,0"
+                        x:Name="btnStart" Click="btnStart_Click"/>
+                <Button Grid.Column="1"
+                        Style="{StaticResource controlButton}"
+                        Width="80"
+                        Height="30"
+                        Foreground="White"
+                        Background="{StaticResource color4}"
+                        Content="Hủy bỏ" Margin="20,13,99,14"
+                        x:Name="btnCancel" Click="btnCancel_Click"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

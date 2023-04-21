@@ -80,14 +80,14 @@ namespace Code.ViewModels
             //Initialize commands
             ShowQuanLyHeThongViewCommand = new ViewModelCommand(ExecuteShowQuanLyHeThongViewCommand);
             ShowQuanLyThietBiViewCommand = new ViewModelCommand(ExecuteShowQuanLyThietBiViewCommand);
-           
+
             ShowTaiKhoanFacebookViewCommand = new ViewModelCommand(ExecuteShowTaiKhoanFacebookViewCommand);
             ShowTaiKhoanGoogleViewCommand = new ViewModelCommand(ExecuteShowTaiKhoanGoogleViewCommand);
             ShowTaoTaiKhoanGoogleViewCommand = new ViewModelCommand(ExecuteShowTaoTaiKhoanGoogleViewCommand);
-            
+
             ShowTaoTaiKhoanFacebookViewCommand = new ViewModelCommand(ExecuteShowTaoTaiKhoanFacebookViewCommand);
             ShowTangLuotXemViewCommand = new ViewModelCommand(ExecuteShowTangLuotXemViewCommand);
-            
+
             ShowTangDangKyViewCommand = new ViewModelCommand(ExecuteShowTangDangKyViewCommand);
             ShowTangTheoDoiViewCommand = new ViewModelCommand(ExecuteShowTangTheoDoiViewCommand);
 

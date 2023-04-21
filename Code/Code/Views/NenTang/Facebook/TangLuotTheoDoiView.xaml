@@ -10,19 +10,45 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="4*"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal">
-                <RadioButton Style="{StaticResource menuButton}">
-                    <fa:IconImage Icon="Play" Style="{StaticResource menuButtonIcon}" Foreground="Lime"/>
-                </RadioButton>
-                <RadioButton Style="{StaticResource menuButton}">
-                    <fa:IconImage Icon="Stop" Style="{StaticResource menuButtonIcon}" Foreground="Red"/>
-                </RadioButton>
-                <RadioButton Style="{StaticResource menuButton}">
-                    <fa:IconImage Icon="Link" Style="{StaticResource menuButtonIcon}" Foreground="Wheat"/>
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Style="{StaticResource mainButton}" Command="{Binding ShowPopUpWindowCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Play" Style="{StaticResource mainButtonIcon}" Foreground="GreenYellow"/>
+                            <TextBlock Text="Thực thi"
+                                   Foreground="{StaticResource titleColor2}"
+                                   FontSize="18"
+                                   FontFamily="Moutserrat"
+                                   FontWeight="Medium" Height="40"
+                                   Margin="0,15,10,0"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource mainButton}" Command="{Binding StopAction}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Stop" Style="{StaticResource mainButtonIcon}" Foreground="Red"/>
+                            <TextBlock Text="Dừng"
+                                   Foreground="{StaticResource titleColor2}"
+                                   FontSize="18"
+                                   FontFamily="Moutserrat"
+                                   FontWeight="Medium" Height="40"
+                                   Margin="0,15,10,0"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+                <RadioButton Style="{StaticResource mainButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconImage Icon="Link" Style="{StaticResource mainButtonIcon}" Foreground="Wheat"/>
+                        <TextBlock Text="Lấy thông tin"
+                                   Foreground="{StaticResource titleColor2}"
+                                   FontSize="18"
+                                   FontFamily="Moutserrat"
+                                   FontWeight="Medium" Height="40"
+                                   Margin="0,15,10,0"/>
+                    </StackPanel>
                 </RadioButton>
             </StackPanel>
         </Grid>
@@ -169,12 +195,26 @@
                         <Setter Property="Foreground" Value="#BCBEE0"/>
                         <Setter Property="Padding" Value="10,0,0,10"/>
                         <Setter Property="FontFamily" Value="Montserrat"/>
-                        <Setter Property="FontSize" Value="15"/>
+                        <Setter Property="FontSize" Value="18"/>
+                        <Setter Property="FontWeight" Value="Medium"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#BCBEE0"/>
+                        <Setter Property="Padding" Value="10,0,0,10"/>
+                        <Setter Property="FontFamily" Value="Montserrat"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
+                </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="1*" Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="ID thiết bị"/>
-                    <DataGridTextColumn Width="5*" Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Trạng thái"/>
+                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="STT" Width="50" />
+                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Mã thiết bị" Width="150" />
+                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Trạng thái" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

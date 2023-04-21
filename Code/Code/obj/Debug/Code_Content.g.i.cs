@@ -8,8 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/back-image.jpg")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/dashboard-template.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/logo.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("model.context.tt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("model.tt")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("phonefarm.mdf")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("phonefarm_log.ldf")]
 
 

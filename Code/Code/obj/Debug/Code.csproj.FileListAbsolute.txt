@@ -38,3 +38,13 @@ D:\AndroidPhoneFarm\Code\Code\obj\Debug\Code.csproj.CopyComplete
 D:\AndroidPhoneFarm\Code\Code\obj\Debug\Code.exe
 D:\AndroidPhoneFarm\Code\Code\obj\Debug\Code.pdb
 D:\AndroidPhoneFarm\Code\Code\obj\Debug\App.baml
+D:\AndroidPhoneFarm\Code\Code\obj\Debug\Views\PopupChonThietBiView.g.cs
+D:\AndroidPhoneFarm\Code\Code\obj\Debug\Code_Content.g.cs
+D:\AndroidPhoneFarm\Code\Code\obj\Debug\Styles\DatagridStyles.baml
+D:\AndroidPhoneFarm\Code\Code\bin\Debug\PhoneFarm.mdf
+D:\AndroidPhoneFarm\Code\Code\bin\Debug\PhoneFarm_log.ldf
+D:\AndroidPhoneFarm\Code\Code\bin\Debug\EntityFramework.dll
+D:\AndroidPhoneFarm\Code\Code\bin\Debug\EntityFramework.SqlServer.dll
+D:\AndroidPhoneFarm\Code\Code\bin\Debug\EntityFramework.xml
+D:\AndroidPhoneFarm\Code\Code\bin\Debug\EntityFramework.SqlServer.xml
+D:\AndroidPhoneFarm\Code\Code\obj\Debug\Views\PopupChonThietBiView.baml
