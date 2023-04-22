@@ -14,6 +14,8 @@ namespace Code.ViewModels
 {
     public class TaoTaiKhoanGoogleViewModel : ViewModelBase
     {
+        public string[] arrHo = { "Nguyen", "Tran", "Ngo", "Ha", "Đinh", "Phan" };
+        public string[] arrTen = { "Duy", "Khanh", "Mai", "Huyen", "Quynh", "Linh", "Huong", "Hoang", "Nguyen", "Nam", "Anh"};
         private List<Thread> threads;
 
         public ICommand ShowPopUpWindowCommand { get; }
@@ -63,20 +65,22 @@ namespace Code.ViewModels
             try
             {
                 int nextIndex = 0;
-                int count = 0;
-                var prefix = RandomString(10);
+                
                 while (true)
                 {
+                    var prefix = RandomString(10);
                     if (nextIndex != -1)
                     {
+                        Random rnd = new Random();
                         var account = new TaiKhoanGoogle();
-                        account.Ten = "Hello";
-                        account.TenDangNhap = String.Format("{0}{1}@gmail.com", prefix, count++);
-                        account.Ho = "Hi";
-                        account.MatKhau = "@Abc13579!";
-                        account.NamSinh = 2000;
-                        account.NgaySinh = 12;
-                        account.ThangSinh = 12;
+                        account.Ten = arrTen[rnd.Next(0,5)];
+                        account.TenDangNhap = String.Format("{0}{1}", prefix, rnd.Next(1,1000));
+                        account.Ho = arrHo[rnd.Next(0,11)];
+                        account.MatKhau = "Abc13579";
+                        account.NamSinh = 2000 + rnd.Next(-10, 10);
+                        account.NgaySinh = rnd.Next(1,28);
+                        account.ThangSinh = rnd.Next(0,11);
+                        account.GioiTinh = rnd.Next(0,2);
                         jobThreads[nextIndex] = new Thread(new ThreadStart(() =>
                         {
                             ThucThiTaoTaiKhoanTrenThietBi(thietbi[nextIndex], account);
@@ -109,10 +113,9 @@ namespace Code.ViewModels
             var job = new CreateGoogleAccountScript(idThietBi, account);
             job.Run();
         }
-
         private string RandomString(int length = 10)
         {
-            var allowChars = "qweryuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+            var allowChars = "qweryuiopasdfghjklzxcvbnm";
             var random = new Random();
             var str = new StringBuilder();
             for (int i = 0; i < length; i++)

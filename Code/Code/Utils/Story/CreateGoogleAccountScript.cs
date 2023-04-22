@@ -22,6 +22,7 @@ namespace Code.Utils.Story
         public CreateGoogleAccountScript(string deviceId, TaiKhoanGoogle account)
         {
             this.account = account;
+            this.account.IDThietBi = deviceId;
             this.adb = new ADBUtils(deviceId);
         }
 
@@ -37,7 +38,7 @@ namespace Code.Utils.Story
                 },
                 onCompleted = () =>
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(2000);
                 }
             };
             var startSetting = new BaseScript()
@@ -48,7 +49,7 @@ namespace Code.Utils.Story
                 },
                 onCompleted = () =>
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(2000);
                 }
             };
 
@@ -70,13 +71,33 @@ namespace Code.Utils.Story
             var waitAndChooseCreateAccount = waitAndClick((XmlNode n) =>
             {
                 return n.Attributes["text"].InnerText == "Create account";
-            }, 20, 5);
+            }, 10);
 
             var waitAndChooseCreateAccountForMyself = waitAndClick((XmlNode n) =>
             {
                 return n.Attributes["text"].InnerText == "For myself";
             }, 10);
 
+            var importNameAndChooseNext = importNameAndClick();
+            var importInforAndChooseNext = importInforAndClick();
+            var importUserNameAndChooseNext = importUserNameAndClick((XmlNode n) =>
+            {
+                return n.Attributes["text"].InnerText == "Create your own Gmail address";
+            });
+            var importPasswordAndChooseNext = importPasswordAndClick();
+            var clickSkip = scrollAndClick ((XmlNode n) =>
+            {
+                return n.Attributes["text"].InnerText == "Skip";
+            }
+            , 2);
+            var clickNext = waitAndClick((XmlNode n) =>
+            {
+                return n.Attributes["text"].InnerText == "Next";
+            }, 10);
+            var clickAgree = scrollAndClick((XmlNode n) =>
+            {
+                return n.Attributes["text"].InnerText == "I agree";
+            },2);
             script.AddNext(
                 stopAcivity.AddNext(
                     startSetting.AddNext(
@@ -84,7 +105,21 @@ namespace Code.Utils.Story
                             clickAddAccount.AddNext(
                                 clickAddGooleAccount.AddNext(
                                     waitAndChooseCreateAccount.AddNext(
-                                        waitAndChooseCreateAccountForMyself
+                                        waitAndChooseCreateAccountForMyself.AddNext(
+                                            importNameAndChooseNext.AddNext(
+                                                importInforAndChooseNext.AddNext(
+                                                    importUserNameAndChooseNext.AddNext(
+                                                        importPasswordAndChooseNext.AddNext(
+                                                            clickSkip.AddNext(
+                                                                clickNext.AddNext(
+                                                                    clickAgree
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
                                         )
                                     )
                                 )
@@ -100,6 +135,171 @@ namespace Code.Utils.Story
             {
                 Console.WriteLine("Thất bại");
             }
+        }
+        private BaseScript importPasswordAndClick()
+        {
+            DateTime startTime = DateTime.UtcNow;
+            return new BaseScript(-1)
+            {
+                init = () =>
+                {
+                    Thread.Sleep(2000);
+                },
+                wait = () =>
+                {
+                    Thread.Sleep(1000);
+                },
+                action = () =>
+                {
+                    adb.typeText(account.MatKhau.ToString());
+                    Thread.Sleep(500);
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.enterEvent();
+                },
+                isError = () =>
+                {
+                    var t = System.DateTime.UtcNow - startTime;
+                    Console.WriteLine(t.TotalSeconds);
+                    return t.TotalSeconds > 10;
+                }
+            };
+        }
+        private BaseScript importUserNameAndClick(Matcher matcher)
+        {
+            DateTime startTime = DateTime.UtcNow;
+            XmlNode node= null;
+            return new BaseScript(-1)
+            {
+                init = () =>
+                {
+                    Thread.Sleep(2000);
+                },
+                canAction = () =>
+                {
+                    var screen = this.adb.getCurrentView();
+                    var needView = ViewUtils.findNode(screen, matcher);
+                    node = needView.FirstOrDefault();
+                    return true;
+                },
+                wait = () =>
+                {
+                    Thread.Sleep(1000);
+                },
+                action = () =>
+                {
+                    if (node != null)
+                    {
+                        var b = Bound.ofXMLNode(node);
+                        var x = b.x + b.h / 2;
+                        var y = b.y + b.w / 2;
+                        adb.tap(x, y);
+                        Thread.Sleep(500);
+                        adb.tabEvent();
+                    }
+                    adb.typeText(account.TenDangNhap.ToString());
+                    Thread.Sleep(1500);
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.enterEvent();
+                },
+                isError = () =>
+                {
+                    var t = System.DateTime.UtcNow - startTime;
+                    Console.WriteLine(t.TotalSeconds);
+                    return t.TotalSeconds > 10;
+                }
+            };
+        }
+        private BaseScript importInforAndClick()
+        {
+            DateTime startTime = DateTime.UtcNow;
+            return new BaseScript(-1)
+            {
+                init = () =>
+                {
+                    Thread.Sleep(2000);
+                },
+                wait = () =>
+                {
+                    Thread.Sleep(1000);
+                },
+                action = () =>
+                {
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.enterEvent();
+                    int tabNum = account.ThangSinh;
+                    for (int i = 0; i < tabNum; i++)
+                    {
+                        adb.tabEvent();
+                        Thread.Sleep(200);
+                    }
+                    adb.enterEvent();
+                    Thread.Sleep(500);
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.typeText(account.NgaySinh.ToString());
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.typeText(account.NamSinh.ToString());
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.enterEvent();
+                    Thread.Sleep(500);
+                    tabNum = account.GioiTinh;
+                    for (int i = 0; i < tabNum; i++)
+                    {
+                        adb.tabEvent();
+                        Thread.Sleep(500);
+                    }
+                    adb.enterEvent();
+                    Thread.Sleep(500);
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.enterEvent();
+                },
+                isError = () =>
+                {
+                    var t = System.DateTime.UtcNow - startTime;
+                    Console.WriteLine(t.TotalSeconds);
+                    return t.TotalSeconds > 10;
+                }
+            };
+        }
+        private BaseScript importNameAndClick()
+        {
+            DateTime startTime = DateTime.UtcNow;
+            return new BaseScript(-1)
+            {
+               
+                init = () =>
+                {
+                    Thread.Sleep(2000);
+                },
+                wait = () =>
+                {
+                    Thread.Sleep(2000);
+                },
+                action = () =>
+                {
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.typeText(account.Ho.ToString());
+                    Thread.Sleep(500);
+                    adb.tabEvent();
+                    Thread.Sleep(500);
+                    adb.typeText(account.Ten.ToString());
+                    Thread.Sleep(500);
+                    adb.enterEvent();
+                },
+                isError = () =>
+                {
+                    var t = System.DateTime.UtcNow - startTime;
+                    Console.WriteLine(t.TotalSeconds);
+                    return t.TotalSeconds > 10;
+                }
+            };
         }
 
         private BaseScript scrollAndClick(Matcher matcher, int maxTry)
@@ -148,7 +348,7 @@ namespace Code.Utils.Story
                 },
                 wait = () =>
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(200);
                 },
                 action = () =>
                 {

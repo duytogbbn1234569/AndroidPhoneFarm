@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:viewmodels="clr-namespace:Code.ViewModels"
              xmlns:local="clr-namespace:Code.Views.QuanLyTaiKhoan"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="dgTaiKhoan_Loaded">
+    <UserControl.DataContext>
+        <viewmodels:TaiKhoanGoogleViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
@@ -15,7 +19,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal">
-                <RadioButton Style="{StaticResource mainButton}" Width="130">
+                <RadioButton x:Name="btnRefresh" Style="{StaticResource mainButton}" Width="130" Click="btnRefresh_Click">
                     <StackPanel Orientation="Horizontal">
                         <fa:IconImage Icon="RotateRight" Style="{StaticResource menuButtonIcon}" Foreground="White" Margin="10,0,10,0"/>
                         <TextBlock  Text="Làm mới"
@@ -25,18 +29,7 @@
                         FontWeight="Medium"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton Style="{StaticResource mainButton}" Command="{Binding ShowPopUpWindowCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <fa:IconImage Icon="Trash" Style="{StaticResource mainButtonIcon}" Foreground="Snow"/>
-                        <TextBlock Text="Xóa"
-                                   Foreground="{StaticResource titleColor2}"
-                                   FontSize="18"
-                                   FontFamily="Moutserrat"
-                                   FontWeight="Medium" Height="40"
-                                   Margin="0,15,10,0"/>
-                    </StackPanel>
-                </RadioButton>
-                <RadioButton Style="{StaticResource mainButton}" Command="{Binding ShowPopUpWindowCommand}">
+                <RadioButton Style="{StaticResource mainButton}" x:Name="btnDeleteError" Click="btnDeleteError_Click">
                     <StackPanel Orientation="Horizontal">
                         <fa:IconImage Icon="Trash" Style="{StaticResource mainButtonIcon}" Foreground="Snow" />
                         <TextBlock Text="Xóa tài khoản lỗi"
@@ -69,7 +62,7 @@
                 Background="#200F53"
                 CornerRadius="10" 
                 Padding="10">
-            <DataGrid ColumnWidth="*" x:Name="dgTaiKhoan" AutoGenerateColumns="False"
+            <DataGrid ColumnWidth="*" x:Name="dgTaiKhoan" AutoGenerateColumns="False"  IsReadOnly="True"
                 Background="#200F53"
                 BorderThickness="0"
                 CanUserAddRows="False"
@@ -102,16 +95,19 @@
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="FontFamily" Value="Montserrat"/>
+                        <Setter Property="FontSize" Value="15"/>
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="50" Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="STT" />
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Tài khoản"/>
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Mật khẩu"/>
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Họ và tên"/>
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Giới tính"/>
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Ngày sinh"/>
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Trạng thái"/>
+                    <DataGridTextColumn Width="50" Binding="{Binding STT}" ClipboardContentBinding="{x:Null}" Header="STT" />
+                    <DataGridTextColumn Binding="{Binding TenDangNhap}" ClipboardContentBinding="{x:Null}" Header="Tài khoản"/>
+                    <DataGridTextColumn Binding="{Binding MatKhau}" ClipboardContentBinding="{x:Null}" Header="Mật khẩu"/>
+                    <DataGridTextColumn Binding="{Binding HoTen}" ClipboardContentBinding="{x:Null}" Header="Họ và tên"/>
+                    <DataGridTextColumn Binding="{Binding GioiTinh}" ClipboardContentBinding="{x:Null}" Header="Giới tính"/>
+                    <DataGridTextColumn Binding="{Binding NgaySinh}" ClipboardContentBinding="{x:Null}" Header="Ngày sinh"/>
+                    <DataGridTextColumn Binding="{Binding TrangThai}" ClipboardContentBinding="{x:Null}" Header="Trạng thái"/>
+                    <DataGridTextColumn Binding="{Binding MaThietBi}" ClipboardContentBinding="{x:Null}" Header="Mã thiết bị"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

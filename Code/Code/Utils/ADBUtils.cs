@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Code.Utils
@@ -68,7 +69,14 @@ namespace Code.Utils
         {
             runAdbCommand(String.Format("shell input text {0}", text));
         }
-
+        public void tabEvent()
+        {
+            runAdbCommand(String.Format("shell input keyevent 61"));
+        } 
+        public void enterEvent()
+        {
+            runAdbCommand(String.Format("shell input keyevent 66"));
+        }
         public static List<string> getListDevices()
         {
             var result = new List<string>();

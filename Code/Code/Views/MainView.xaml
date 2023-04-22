@@ -18,7 +18,6 @@
         AllowsTransparency="True">
     <Window.DataContext>
         <viewModel:MainViewModel/>
-        <viewModel:PopupChonThietBiViewModel/>
     </Window.DataContext>
 
     <Window.Resources>

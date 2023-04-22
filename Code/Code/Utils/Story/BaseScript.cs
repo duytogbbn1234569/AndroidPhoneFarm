@@ -95,5 +95,10 @@ namespace Code.Utils.Story
             }
             else return this._candidates.Count == 0;
         }
+
+        internal BaseScript AddNext(object clickOwnUsernameAndChooseNext)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

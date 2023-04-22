@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Code.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +22,56 @@ namespace Code.Views.QuanLyTaiKhoan
     /// </summary>
     public partial class TaiKhoanFacebookView : UserControl
     {
+        public ObservableCollection<ThongTinTaiKhoan> taiKhoans;
         public TaiKhoanFacebookView()
         {
             InitializeComponent();
+            taiKhoans = new ObservableCollection<ThongTinTaiKhoan>();
+        }
+
+        private void dgTaiKhoan_Loaded(object sender, RoutedEventArgs e)
+        {
+            Load();
+        }
+
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            Load();
+        }
+
+        private void btnDeleteError_Click(object sender, RoutedEventArgs e)
+        {
+            var objectList = DataProvider.Ins.db.TaiKhoanGoogles;
+            foreach (var item in objectList)
+            {
+                if (item.TrangThai != 1)
+                {
+                    DataProvider.Ins.db.TaiKhoanGoogles.Remove(item);
+                }
+            }
+            DataProvider.Ins.db.SaveChanges();
+            MessageBox.Show("Xóa thành công");
+            Load();
+        }
+        private void Load()
+        {
+            taiKhoans.Clear();
+            var objectList = DataProvider.Ins.db.TaiKhoanFacebooks;
+            int stt = 1;
+            foreach (var item in objectList)
+            {
+                ThongTinTaiKhoan taiKhoan = new ThongTinTaiKhoan();
+                taiKhoan.STT = stt++;
+                taiKhoan.TenDangNhap = item.TenDangNhap;
+                taiKhoan.MatKhau = item.MatKhau;
+                taiKhoan.HoTen = string.Format("{0} {1}", item.Ho, item.Ten);
+                taiKhoan.GioiTinh = item.GioiTinh == 0 ? "Nữ" : item.GioiTinh == 1 ? "Nam" : "Không";
+                taiKhoan.NgaySinh = string.Format("{0}/{1}/{2}", item.NgaySinh, item.ThangSinh, item.NamSinh);
+                taiKhoan.TrangThai = item.TrangThai == 1 ? "Truy cập" : "Lỗi";
+                taiKhoan.MaThietBi = item.IDThietBi;
+                taiKhoans.Add(taiKhoan);
+            }
+            dgTaiKhoan.ItemsSource = taiKhoans;
         }
     }
 }

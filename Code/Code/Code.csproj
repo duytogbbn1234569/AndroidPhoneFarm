@@ -98,6 +98,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataProvider.cs" />
+    <Compile Include="Models\ThongTinTaiKhoan.cs" />
     <Compile Include="TaiKhoanFacebook.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -254,9 +256,7 @@
     <Resource Include="Images\dashboard-template.png" />
     <Resource Include="Images\logo.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -269,10 +269,10 @@
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
     <Content Include="PhoneFarm.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PhoneFarm_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>PhoneFarm.mdf</DependentUpon>
     </Content>
   </ItemGroup>
