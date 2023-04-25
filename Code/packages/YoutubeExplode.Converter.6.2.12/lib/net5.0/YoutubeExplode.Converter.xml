@@ -1,0 +1,374 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>YoutubeExplode.Converter</name>
+    </assembly>
+    <members>
+        <member name="T:YoutubeExplode.Converter.ConversionExtensions">
+            <summary>
+            Extensions for <see cref="T:YoutubeExplode.Videos.VideoClient" /> that provide interface for downloading videos through FFmpeg.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionExtensions.IsAudioOnly(YoutubeExplode.Videos.Streams.Container)">
+            <summary>
+            Checks whether the container is a known audio-only container.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionExtensions.DownloadAsync(YoutubeExplode.Videos.VideoClient,System.Collections.Generic.IReadOnlyList{YoutubeExplode.Videos.Streams.IStreamInfo},System.Collections.Generic.IReadOnlyList{YoutubeExplode.Videos.ClosedCaptions.ClosedCaptionTrackInfo},YoutubeExplode.Converter.ConversionRequest,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads the specified media streams and closed captions and processes them into a single file.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionExtensions.DownloadAsync(YoutubeExplode.Videos.VideoClient,System.Collections.Generic.IReadOnlyList{YoutubeExplode.Videos.Streams.IStreamInfo},YoutubeExplode.Converter.ConversionRequest,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Downloads the specified media streams and processes them into a single file.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionExtensions.DownloadAsync(YoutubeExplode.Videos.VideoClient,YoutubeExplode.Videos.VideoId,YoutubeExplode.Converter.ConversionRequest,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Resolves the most optimal media streams for the specified video,
+            downloads them, and processes into a single file.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionExtensions.DownloadAsync(YoutubeExplode.Videos.VideoClient,YoutubeExplode.Videos.VideoId,System.String,System.Action{YoutubeExplode.Converter.ConversionRequestBuilder},System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Resolves the most optimal media streams for the specified video,
+            downloads them, and processes into a single file.
+            </summary>
+            <remarks>
+            Output container is derived from the file extension, unless explicitly specified.
+            </remarks>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionExtensions.DownloadAsync(YoutubeExplode.Videos.VideoClient,YoutubeExplode.Videos.VideoId,System.String,System.IProgress{System.Double},System.Threading.CancellationToken)">
+            <summary>
+            Resolves the most optimal media streams for the specified video,
+            downloads them, and processes into a single file.
+            </summary>
+            <remarks>
+            Output container is derived from the file extension.
+            If none is specified, mp4 is chosen by default.
+            </remarks>
+        </member>
+        <member name="T:YoutubeExplode.Converter.ConversionFormat">
+            <summary>
+            Encapsulates conversion media format.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionFormat.Name">
+            <summary>
+            Format name.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionFormat.IsAudioOnly">
+            <summary>
+            Whether this format is a known audio-only format.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionFormat.#ctor(System.String)">
+            <summary>
+            Initializes an instance of <see cref="T:YoutubeExplode.Converter.ConversionFormat" />.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionFormat.ToString">
+            <inheritdoc />
+        </member>
+        <member name="T:YoutubeExplode.Converter.ConversionPreset">
+            <summary>
+            Encoder preset.
+            </summary>
+        </member>
+        <member name="F:YoutubeExplode.Converter.ConversionPreset.VerySlow">
+            <summary>
+            Much slower conversion speed and smaller output file size.
+            </summary>
+        </member>
+        <member name="F:YoutubeExplode.Converter.ConversionPreset.Slow">
+            <summary>
+            Slightly slower conversion speed and smaller output file size.
+            </summary>
+        </member>
+        <member name="F:YoutubeExplode.Converter.ConversionPreset.Medium">
+            <summary>
+            Default preset.
+            Balanced conversion speed and output file size.
+            </summary>
+        </member>
+        <member name="F:YoutubeExplode.Converter.ConversionPreset.Fast">
+            <summary>
+            Slightly faster conversion speed and bigger output file size.
+            </summary>
+        </member>
+        <member name="F:YoutubeExplode.Converter.ConversionPreset.VeryFast">
+            <summary>
+            Much faster conversion speed and bigger output file size.
+            </summary>
+        </member>
+        <member name="F:YoutubeExplode.Converter.ConversionPreset.UltraFast">
+            <summary>
+            Fastest conversion speed and biggest output file size.
+            </summary>
+        </member>
+        <member name="T:YoutubeExplode.Converter.ConversionRequest">
+            <summary>
+            Conversion options.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionRequest.FFmpegCliFilePath">
+            <summary>
+            Path to the FFmpeg CLI.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionRequest.OutputFilePath">
+            <summary>
+            Output file path.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionRequest.Container">
+            <summary>
+            Output container.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionRequest.Format">
+            <summary>
+            Output format.
+            </summary>
+        </member>
+        <member name="P:YoutubeExplode.Converter.ConversionRequest.Preset">
+            <summary>
+            Encoder preset.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequest.#ctor(System.String,System.String,YoutubeExplode.Videos.Streams.Container,YoutubeExplode.Converter.ConversionPreset)">
+            <summary>
+            Initializes an instance of <see cref="T:YoutubeExplode.Converter.ConversionRequest" />.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequest.#ctor(System.String,System.String,YoutubeExplode.Converter.ConversionFormat,YoutubeExplode.Converter.ConversionPreset)">
+            <summary>
+            Initializes an instance of <see cref="T:YoutubeExplode.Converter.ConversionRequest" />.
+            </summary>
+        </member>
+        <member name="T:YoutubeExplode.Converter.ConversionRequestBuilder">
+            <summary>
+            Builder for <see cref="T:YoutubeExplode.Converter.ConversionRequest" />.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequestBuilder.#ctor(System.String)">
+            <summary>
+            Initializes an instance of <see cref="T:YoutubeExplode.Converter.ConversionRequestBuilder" />.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequestBuilder.SetFFmpegPath(System.String)">
+            <summary>
+            Sets the path to the FFmpeg CLI.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequestBuilder.SetContainer(YoutubeExplode.Videos.Streams.Container)">
+            <summary>
+            Sets the output container.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequestBuilder.SetContainer(System.String)">
+            <summary>
+            Sets the output container.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequestBuilder.SetFormat(YoutubeExplode.Converter.ConversionFormat)">
+            <summary>
+            Sets the conversion format.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequestBuilder.SetFormat(System.String)">
+            <summary>
+            Sets the conversion format.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequestBuilder.SetPreset(YoutubeExplode.Converter.ConversionPreset)">
+            <summary>
+            Sets the conversion preset.
+            </summary>
+        </member>
+        <member name="M:YoutubeExplode.Converter.ConversionRequestBuilder.Build">
+            <summary>
+            Builds the resulting request.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute">
+            <summary>
+            Specifies that this constructor sets all required members for the current type,
+            and callers do not need to set any required members themselves.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute">
+            <summary>
+            Specifies the syntax used in a string.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.#ctor(System.String)">
+            <summary>
+            Initializes the <see cref="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute"/> with the identifier of the syntax used.
+            </summary>
+            <param name="syntax">The syntax identifier.</param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.#ctor(System.String,System.Object[])">
+            <summary>Initializes the <see cref="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute"/> with the identifier of the syntax used.</summary>
+            <param name="syntax">The syntax identifier.</param>
+            <param name="arguments">Optional arguments associated with the specific syntax employed.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Syntax">
+            <summary>Gets the identifier of the syntax used.</summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Arguments">
+            <summary>Optional arguments associated with the specific syntax employed.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.CompositeFormat">
+            <summary>The syntax identifier for strings containing composite formats for string formatting.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.DateOnlyFormat">
+            <summary>The syntax identifier for strings containing date format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.DateTimeFormat">
+            <summary>The syntax identifier for strings containing date and time format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.EnumFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.Enum"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.GuidFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.Guid"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Json">
+            <summary>The syntax identifier for strings containing JavaScript Object Notation (JSON).</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.NumericFormat">
+            <summary>The syntax identifier for strings containing numeric format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Regex">
+            <summary>The syntax identifier for strings containing regular expressions.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.TimeOnlyFormat">
+            <summary>The syntax identifier for strings containing time format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.TimeSpanFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.TimeSpan"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Uri">
+            <summary>The syntax identifier for strings containing URIs.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Xml">
+            <summary>The syntax identifier for strings containing XML.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.UnscopedRefAttribute">
+            <summary>
+            Used to indicate a byref escapes and is not scoped.
+            </summary>
+            <remarks>
+            <para>
+            There are several cases where the C# compiler treats a <see langword="ref"/> as implicitly
+            <see langword="scoped"/> - where the compiler does not allow the <see langword="ref"/> to escape the method.
+            </para>
+            <para>
+            For example:
+            <list type="number">
+                <item><see langword="this"/> for <see langword="struct"/> instance methods.</item>
+                <item><see langword="ref"/> parameters that refer to <see langword="ref"/> <see langword="struct"/> types.</item>
+                <item><see langword="out"/> parameters.</item>
+            </list>
+            </para>
+            <para>
+            This attribute is used in those instances where the <see langword="ref"/> should be allowed to escape.
+            </para>
+            <para>
+            Applying this attribute, in any form, has impact on consumers of the applicable API. It is necessary for
+            API authors to understand the lifetime implications of applying this attribute and how it may impact their users.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute">
+            <summary>
+            Indicates that compiler support for a particular feature is required for the location where this attribute is applied.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute"/> type.
+            </summary>
+            <param name="featureName">The name of the feature to indicate.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName">
+            <summary>
+            The name of the compiler feature.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.IsOptional">
+            <summary>
+            If true, the compiler can choose to allow access to the location where this attribute is applied if it does not understand <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/>.
+            </summary>
+        </member>
+        <member name="F:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.RefStructs">
+            <summary>
+            The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the ref structs C# feature.
+            </summary>
+        </member>
+        <member name="F:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.RequiredMembers">
+            <summary>
+            The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the required members C# feature.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute">
+            <summary>
+            Indicates which arguments to a method involving an interpolated string handler should be passed to that handler.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="argument">The name of the argument that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="arguments">The names of the arguments that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.Arguments">
+            <summary>
+            Gets the names of the arguments that should be passed to the handler.
+            </summary>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute">
+            <summary>
+            Indicates the attributed type is to be used as an interpolated string handler.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.RequiredMemberAttribute">
+            <summary>
+            Specifies that a type has required members or that a member is required.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute"/> class with the specified message.
+            </summary>
+            <param name="message">An optional message associated with this attribute instance.</param>
+        </member>
+        <member name="P:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.Message">
+            <summary>
+            Returns the optional message associated with this attribute instance.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.Url">
+            <summary>
+            Returns the optional URL associated with this attribute instance.
+            </summary>
+        </member>
+    </members>
+</doc>

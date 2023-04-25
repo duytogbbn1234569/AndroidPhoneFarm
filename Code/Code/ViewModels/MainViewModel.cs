@@ -126,7 +126,7 @@ namespace Code.ViewModels
 
         private void ExecuteShowTaoTaiKhoanGoogleViewCommand(object obj)
         {
-            CurrentChildView = new TaoTaiKhoanGoogleViewModel();
+            CurrentChildView = TaoTaiKhoanGoogleViewModel.GetInstance();
             Caption = "Tạo tài khoản";
             Icon = IconChar.User;
         }

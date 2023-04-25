@@ -58,7 +58,7 @@
                 Background="#200F53"
                 CornerRadius="10" 
                 Padding="10">
-            <DataGrid ColumnWidth="*" x:Name="dgTaiKhoan" Loaded="dgTaiKhoan_Loaded"
+            <DataGrid ColumnWidth="*" x:Name="dgTaiKhoan"
                       Style="{StaticResource datagrid}"
                   Background="#200F53"
                   BorderThickness="0">

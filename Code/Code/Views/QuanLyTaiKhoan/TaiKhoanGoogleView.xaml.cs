@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,20 +24,27 @@ namespace Code.Views.QuanLyTaiKhoan
     public partial class TaiKhoanGoogleView : UserControl
     {
         public ObservableCollection<ThongTinTaiKhoan> taiKhoans;
+        private BackgroundWorker bk = new BackgroundWorker();
+        DbSet<TaiKhoanGoogle> objectList = null;
         public TaiKhoanGoogleView()
         {
-            InitializeComponent();
             taiKhoans = new ObservableCollection<ThongTinTaiKhoan>();
-        }
-
-        private void dgTaiKhoan_Loaded(object sender, RoutedEventArgs e)
-        {
-            Load();
+            InitializeComponent();
+            dgTaiKhoan.ItemsSource = taiKhoans;
+            bk.DoWork += (obj, e) =>
+            {
+                objectList = DataProvider.Ins.db.TaiKhoanGoogles;
+            };
+            bk.RunWorkerCompleted += (obj, e) =>
+            {
+                Load();
+            };
+            bk.RunWorkerAsync();
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            Load();
+            bk.RunWorkerAsync();
         }
 
         private void btnDeleteError_Click(object sender, RoutedEventArgs e)
@@ -50,12 +59,11 @@ namespace Code.Views.QuanLyTaiKhoan
             }
             DataProvider.Ins.db.SaveChanges();
             MessageBox.Show("Xóa thành công");
-            Load();
+            bk.RunWorkerAsync();
         }
         private void Load()
         {
             taiKhoans.Clear();
-            var objectList = DataProvider.Ins.db.TaiKhoanGoogles;
             int stt = 1;
             foreach (var item in objectList)
             {
@@ -70,7 +78,6 @@ namespace Code.Views.QuanLyTaiKhoan
                 taiKhoan.MaThietBi = item.IDThietBi;
                 taiKhoans.Add(taiKhoan);
             }
-            dgTaiKhoan.ItemsSource = taiKhoans;
         }
     }
 }

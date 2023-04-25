@@ -11,9 +11,10 @@ namespace Code.Utils
 {
     public class ADBUtils
     {
-        public readonly static string path = @"C:\Users\duyto\AppData\Local\Android\Sdk\platform-tools\adb.exe";
+        public readonly static string path = "adb.exe";
 
         private readonly string deviceId;
+        private readonly string trangThai;
 
         public ADBUtils(string deviceId)
         {
@@ -77,9 +78,9 @@ namespace Code.Utils
         {
             runAdbCommand(String.Format("shell input keyevent 66"));
         }
-        public static List<string> getListDevices()
+        public static List<Tuple<string, string>> getListDevices()
         {
-            var result = new List<string>();
+            var result = new List<Tuple<string, string>>();
             string[] lines = RunAdbCommand("devices", true).Split('\n');
             lines = lines.Skip(1).ToArray();
             foreach (var line in lines)
@@ -88,7 +89,7 @@ namespace Code.Utils
                 if (l != "")
                 {
                     var words = l.Split('\t');
-                    result.Add(words[0]);
+                    result.Add(new Tuple<string, string>(words[0], words[1]));
                 }
             }
             return result;

@@ -39,7 +39,7 @@ namespace Code.Views
             foreach (var dev in devives)
             {
                 var item = new PopupChonThietBiViewModel();
-                item.MaThietBi = dev;
+                item.MaThietBi = dev.Item1;
                 item.SoThuTu = stt++;
                 tmp.Add(item);
             }
@@ -74,7 +74,7 @@ namespace Code.Views
                     thietbi.Add(c.MaThietBi);
                 }
             }
-            onStartAction?.Invoke(thietbi);
+            if (thietbi.Count != 0) onStartAction?.Invoke(thietbi);
             this.Close();
         }
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -16,7 +17,6 @@ namespace Code.Utils.Story
         private readonly string setting = "com.android.settings";
         private readonly string createAccount = "com.google.android.gms";
         private readonly TaiKhoanGoogle account;
-        private readonly Stack<String> stack = new Stack<String>();
         private readonly ADBUtils adb;
 
         public CreateGoogleAccountScript(string deviceId, TaiKhoanGoogle account)
@@ -26,7 +26,7 @@ namespace Code.Utils.Story
             this.adb = new ADBUtils(deviceId);
         }
 
-        public void Run()
+        public bool Run()
         {
             var script = new BaseScript();
             var stopAcivity = new BaseScript()
@@ -85,11 +85,7 @@ namespace Code.Utils.Story
                 return n.Attributes["text"].InnerText == "Create your own Gmail address";
             });
             var importPasswordAndChooseNext = importPasswordAndClick();
-            var clickSkip = scrollAndClick ((XmlNode n) =>
-            {
-                return n.Attributes["text"].InnerText == "Skip";
-            }
-            , 2);
+            var clickSkip = clickSkipOrException();
             var clickNext = waitAndClick((XmlNode n) =>
             {
                 return n.Attributes["text"].InnerText == "Next";
@@ -127,15 +123,64 @@ namespace Code.Utils.Story
                         )
                     )
                 );
-            if (script.RunScript())
-            {
-                Console.WriteLine("Thành công");
-            }
-            else
-            {
-                Console.WriteLine("Thất bại");
-            }
+            return script.RunScript();
         }
+
+        private BaseScript clickSkipOrException()
+        {
+            DateTime startTime = DateTime.UtcNow;
+            XmlNode node = null;
+            return new BaseScript(-1)
+            {
+                init = () =>
+                {
+                    Thread.Sleep(2000);
+                    startTime = DateTime.UtcNow;
+                },
+                wait = () =>
+                {
+                    Thread.Sleep(1000);
+                },
+                action = () =>
+                {
+                    var screen = this.adb.getCurrentView();
+                    var needView = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
+                    {
+                        return n.Attributes["text"].InnerText == "Next";
+                    }));
+                    if (needView.Count > 0)
+                    {
+                        node = needView.FirstOrDefault();
+                        var b = Bound.ofXMLNode(node);
+                        var x = b.x + b.h / 2;
+                        var y = b.y + b.w / 2;
+                        adb.tap(x, y);
+                        Thread.Sleep(5000);
+                    }
+                    this.adb.swipe(100, 1200, 100, 100);
+                    needView = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
+                    {
+                        return n.Attributes["text"].InnerText == "Next";
+                    }));
+                    if (needView.Count > 0)
+                    {
+                        node = needView.FirstOrDefault();
+                        var b = Bound.ofXMLNode(node);
+                        var x = (b.x + b.h) / 2;
+                        var y = (b.y + b.w) / 2;
+                        adb.tap(x, y);
+                        Thread.Sleep(5000);
+                    }
+                },
+                isError = () =>
+                {
+                    var t = System.DateTime.UtcNow - startTime;
+                    Console.WriteLine(t.TotalSeconds);
+                    return t.TotalSeconds > 40;
+                }
+            };
+        }
+
         private BaseScript importPasswordAndClick()
         {
             DateTime startTime = DateTime.UtcNow;
@@ -144,6 +189,7 @@ namespace Code.Utils.Story
                 init = () =>
                 {
                     Thread.Sleep(2000);
+                    startTime = DateTime.UtcNow;
                 },
                 wait = () =>
                 {
@@ -153,6 +199,7 @@ namespace Code.Utils.Story
                 {
                     adb.typeText(account.MatKhau.ToString());
                     Thread.Sleep(500);
+                    adb.tabEvent();
                     adb.tabEvent();
                     Thread.Sleep(500);
                     adb.enterEvent();
@@ -174,12 +221,21 @@ namespace Code.Utils.Story
                 init = () =>
                 {
                     Thread.Sleep(2000);
+                    startTime = DateTime.UtcNow;
                 },
                 canAction = () =>
                 {
                     var screen = this.adb.getCurrentView();
                     var needView = ViewUtils.findNode(screen, matcher);
                     node = needView.FirstOrDefault();
+                    if (needView.Count() != 0)
+                    {
+                        needView = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
+                        {
+                            return n.Attributes["text"].InnerText == "How you'll sign";
+                        }));
+                        return needView.Count() != 0;
+                    }
                     return true;
                 },
                 wait = () =>
@@ -191,16 +247,15 @@ namespace Code.Utils.Story
                     if (node != null)
                     {
                         var b = Bound.ofXMLNode(node);
-                        var x = b.x + b.h / 2;
+                        var x = 50;
                         var y = b.y + b.w / 2;
                         adb.tap(x, y);
-                        Thread.Sleep(500);
-                        adb.tabEvent();
+                        Thread.Sleep(800);
                     }
                     adb.typeText(account.TenDangNhap.ToString());
-                    Thread.Sleep(1500);
+                    Thread.Sleep(800);
                     adb.tabEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.enterEvent();
                 },
                 isError = () =>
@@ -219,6 +274,7 @@ namespace Code.Utils.Story
                 init = () =>
                 {
                     Thread.Sleep(2000);
+                    startTime = DateTime.UtcNow;
                 },
                 wait = () =>
                 {
@@ -236,17 +292,17 @@ namespace Code.Utils.Story
                         Thread.Sleep(200);
                     }
                     adb.enterEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.tabEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.typeText(account.NgaySinh.ToString());
                     adb.tabEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.typeText(account.NamSinh.ToString());
                     adb.tabEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.enterEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     tabNum = account.GioiTinh;
                     for (int i = 0; i < tabNum; i++)
                     {
@@ -254,9 +310,9 @@ namespace Code.Utils.Story
                         Thread.Sleep(500);
                     }
                     adb.enterEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.tabEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.enterEvent();
                 },
                 isError = () =>
@@ -276,6 +332,7 @@ namespace Code.Utils.Story
                 init = () =>
                 {
                     Thread.Sleep(2000);
+                    startTime = DateTime.UtcNow;
                 },
                 wait = () =>
                 {
@@ -317,14 +374,19 @@ namespace Code.Utils.Story
                 wait = () =>
                 {
                     this.adb.swipe(100, 800, 100, 100);
+                    maxTry--;
                 },
                 action = () =>
                 {
                     var b = Bound.ofXMLNode(node);
-                    var x = b.x + b.h / 2;
+                    var x = b.x + b.h/ 2;
                     var y = b.y + b.w / 2;
                     adb.tap(x, y);
                 },
+                isError = () =>
+                {
+                    return maxTry <= 0;
+                }
             };
         }
 

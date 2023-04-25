@@ -39,7 +39,7 @@
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
-                <RadioButton Style="{StaticResource mainButton}">
+                <RadioButton Style="{StaticResource mainButton}" Command="{Binding GetInformation}">
                     <StackPanel Orientation="Horizontal">
                         <fa:IconImage Icon="Link" Style="{StaticResource mainButtonIcon}" Foreground="Wheat"/>
                         <TextBlock Text="Lấy thông tin"
@@ -90,16 +90,16 @@
                                    FontFamily="Moutserrat"
                                    FontWeight="Medium" Height="25"
                                    Margin="20,10,0,0"/>
-                    <TextBox Grid.Column="1"
+                    <TextBox Text="{Binding DuongDan}" Grid.Column="1"
                              Grid.Row="0"
                              Width="300"
                              Height="30"
                              />
-                    <TextBox Grid.Column="1"
+                    <TextBox Text="{Binding SoLuotTang}" Grid.Column="1"
                              Grid.Row="1"
                              Width="300"
                              Height="30"/>
-                    <TextBox Grid.Column="1"
+                    <TextBox Text="{Binding TrangThai}" Grid.Column="1" IsReadOnly="True"
                              Grid.Row="2"
                              Width="300"
                              Height="30"/>
@@ -139,15 +139,7 @@
                                    FontFamily="Moutserrat"
                                    FontWeight="Medium" Height="25"
                                    Margin="20,0,0,0"/>
-                    <TextBlock Text="Số lượt đăng ký"
-                               Grid.Column="0"
-                               Grid.Row="3"
-                                   Foreground="{StaticResource titleColor2}"
-                                   FontSize="14"
-                                   FontFamily="Moutserrat"
-                                   FontWeight="Medium" Height="25"
-                                   Margin="20,0,0,0"/>
-                    <TextBlock Text=""
+                    <TextBlock Text="{Binding TenKenh}"
                                Grid.Column="1"
                                Grid.Row="1"
                                    Foreground="{StaticResource titleColor2}"
@@ -155,17 +147,9 @@
                                    FontFamily="Moutserrat"
                                    FontWeight="Medium" Height="25"
                                    Margin="20,0,0,0"/>
-                    <TextBlock Text=""
+                    <TextBlock Text="{Binding SoVideo}"
                                Grid.Column="1"
                                Grid.Row="2"
-                                   Foreground="{StaticResource titleColor2}"
-                                   FontSize="14"
-                                   FontFamily="Moutserrat"
-                                   FontWeight="Medium" Height="25"
-                                   Margin="20,0,0,0"/>
-                    <TextBlock Text=""
-                               Grid.Column="1"
-                               Grid.Row="3"
                                    Foreground="{StaticResource titleColor2}"
                                    FontSize="14"
                                    FontFamily="Moutserrat"

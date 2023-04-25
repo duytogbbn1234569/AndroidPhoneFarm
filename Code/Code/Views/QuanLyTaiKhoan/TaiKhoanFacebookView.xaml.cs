@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,40 +25,46 @@ namespace Code.Views.QuanLyTaiKhoan
     public partial class TaiKhoanFacebookView : UserControl
     {
         public ObservableCollection<ThongTinTaiKhoan> taiKhoans;
+        private BackgroundWorker bk = new BackgroundWorker();
+        DbSet<TaiKhoanFacebook> objectList = null;
         public TaiKhoanFacebookView()
         {
-            InitializeComponent();
             taiKhoans = new ObservableCollection<ThongTinTaiKhoan>();
-        }
-
-        private void dgTaiKhoan_Loaded(object sender, RoutedEventArgs e)
-        {
-            Load();
+            InitializeComponent();
+            dgTaiKhoan.ItemsSource = taiKhoans;
+            bk.DoWork += (obj, e) =>
+            {
+                objectList = DataProvider.Ins.db.TaiKhoanFacebooks;
+            };
+            bk.RunWorkerCompleted += (obj, e) =>
+            {
+                Load();
+            };
+            bk.RunWorkerAsync();
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            Load();
+            bk.RunWorkerAsync();
         }
 
         private void btnDeleteError_Click(object sender, RoutedEventArgs e)
         {
-            var objectList = DataProvider.Ins.db.TaiKhoanGoogles;
+            var objectList = DataProvider.Ins.db.TaiKhoanFacebooks;
             foreach (var item in objectList)
             {
                 if (item.TrangThai != 1)
                 {
-                    DataProvider.Ins.db.TaiKhoanGoogles.Remove(item);
+                    DataProvider.Ins.db.TaiKhoanFacebooks.Remove(item);
                 }
             }
             DataProvider.Ins.db.SaveChanges();
             MessageBox.Show("Xóa thành công");
-            Load();
+            bk.RunWorkerAsync();
         }
         private void Load()
         {
             taiKhoans.Clear();
-            var objectList = DataProvider.Ins.db.TaiKhoanFacebooks;
             int stt = 1;
             foreach (var item in objectList)
             {
