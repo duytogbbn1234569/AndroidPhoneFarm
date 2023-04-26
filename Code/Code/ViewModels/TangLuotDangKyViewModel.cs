@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using YoutubeExplode;
 using YoutubeExplode.Common;
@@ -11,8 +13,18 @@ namespace Code.ViewModels
 {
     public class TangLuotDangKyViewModel : ViewModelBase
     {
+        private static TangLuotDangKyViewModel INSTANCE = null;
+
+        public static TangLuotDangKyViewModel GetInstance()
+        {
+            if (INSTANCE == null)
+            {
+                INSTANCE = new TangLuotDangKyViewModel();
+            }
+            return INSTANCE;
+        }
         private string _duongDan;
-        private string _soLuotCanTang;
+        private int _soLuotTang;
         private string _trangThai;
         private string _tenKenh;
         private string _soVideo;
@@ -27,13 +39,13 @@ namespace Code.ViewModels
                 OnPropertyChanged("DuongDan");
             }
         }
-        public string SoLuotCanTang
+        public int SoLuotTang
         {
-            get { return _soLuotCanTang; }
+            get { return _soLuotTang; }
             set
             {
-                _soLuotCanTang = value;
-                OnPropertyChanged("SoLuotCanTang");
+                _soLuotTang = value;
+                OnPropertyChanged("SoLuotTang");
             }
         }
         public string TrangThai
@@ -74,11 +86,36 @@ namespace Code.ViewModels
         }
         public ICommand GetInformation { get; }
 
-        public TangLuotDangKyViewModel()
+        public TangLuotDangKyViewModel() : base()
         {
             GetInformation = new ViewModelCommand(ExecuteGetInformation);
+            SoLuotTang = 2;
+        }
+        protected override void ExecuteShowPopUpWindow(object obj)
+        {
+            var canExcute = KiemTraURLHopLe(DuongDan);
+            if (canExcute)
+            {
+                base.ExecuteShowPopUpWindow(obj);
+            }
+            else
+            {
+                MessageBox.Show("Thông tin nhập sai vui lòng nhập lại");
+            }
         }
 
+        private bool KiemTraURLHopLe(string url)
+        {
+            var regex = new Regex(@"^(https?\:\/\/)?(www\.)?youtube\.com\/(c|channel)\/(?:@)?([a-zA-Z0-9_-]{1,})$");
+            if (DuongDan != null)
+            {
+                if (regex.IsMatch(DuongDan))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private async void ExecuteGetInformation(object obj)
         {
 

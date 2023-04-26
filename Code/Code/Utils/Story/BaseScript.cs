@@ -24,7 +24,7 @@ namespace Code.Utils.Story
             this.tryCounter = maxTry;
         }
 
-        public bool RunScript()
+        public virtual bool RunScript()
         {
             init.Invoke();
             while (!isError.Invoke() && !canAction.Invoke())
@@ -42,7 +42,8 @@ namespace Code.Utils.Story
                 {
                     onCompleted.Invoke();
                     return chooseAndRunNextScript();
-                } else return true;
+                }
+                else return false;
             }
             return false;
         }

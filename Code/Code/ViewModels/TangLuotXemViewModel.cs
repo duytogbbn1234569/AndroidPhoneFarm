@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Code.Utils.Story;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using YoutubeExplode;
 
@@ -10,9 +13,22 @@ namespace Code.ViewModels
 {
     public class TangLuotXemViewModel : ViewModelBase
     {
+        YoutubeClient youtube = new YoutubeClient();
+        private const int ThoiGianXemToiThieu = 30;
+
+        private static TangLuotXemViewModel INSTANCE = null;
+
+        public static TangLuotXemViewModel GetInstance()
+        {
+            if (INSTANCE == null)
+            {
+                INSTANCE = new TangLuotXemViewModel();
+            }
+            return INSTANCE;
+        }
         private string _duongDan;
-        private string _soLuotCanTang;
-        private string _thoiGianXem;
+        private int _soLuotCanTang;
+        private int _thoiGianXem;
         private string _trangThai;
         private string _tieuDe;
         private string _thoiLuong;
@@ -27,7 +43,7 @@ namespace Code.ViewModels
                 OnPropertyChanged("DuongDan");
             }
         }
-        public string SoLuotCanTang
+        public int SoLuotCanTang
         {
             get { return _soLuotCanTang; }
             set
@@ -36,7 +52,7 @@ namespace Code.ViewModels
                 OnPropertyChanged("SoLuotCanTang");
             }
         }
-        public string ThoiGianXem
+        public int ThoiGianXem
         {
             get { return _thoiGianXem; }
             set
@@ -83,21 +99,52 @@ namespace Code.ViewModels
         }
         public ICommand GetInformation { get; }
 
-        public TangLuotXemViewModel()
+        private TangLuotXemViewModel() : base()
         {
             GetInformation = new ViewModelCommand(ExecuteGetInformation);
+            ThoiGianXem = ThoiGianXemToiThieu;
+            SoLuotCanTang = 5;
+        }
+
+        protected override void ExecuteShowPopUpWindow(object obj)
+        {
+            var canExcute = KiemTraURLHopLe(DuongDan);
+
+            if (canExcute)
+            {
+                base.ExecuteShowPopUpWindow(obj);
+            }
+            else
+            {
+                MessageBox.Show("Thông tin nhập sai vui lòng nhâp lại");
+            }
+        }
+
+        private bool KiemTraURLHopLe(string url)
+        {
+            var regex = new Regex(@"^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+");
+            if (DuongDan != null)
+            {
+                if (regex.IsMatch(DuongDan))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private async void ExecuteGetInformation(object obj)
         {
-
-            var youtube = new YoutubeClient();
-
             var video = await youtube.Videos.GetAsync(DuongDan);
 
             TieuDe = video.Title; 
             ThoiLuong = video.Duration.ToString();
             SoLuotXem = video.Engagement.ViewCount.ToString();
+        }
+
+        protected override BaseScript createScriptToRun(string thietbiId)
+        {
+            return new XemVideoYoutubeScript(thietbiId, DuongDan, ThoiGianXem);
         }
     }
 }

@@ -149,6 +149,7 @@
     <Compile Include="Utils\ADBUtils.cs" />
     <Compile Include="Utils\Story\BaseScript.cs" />
     <Compile Include="Utils\Story\CreateGoogleAccountScript.cs" />
+    <Compile Include="Utils\Story\XemVideoYoutubeScript.cs" />
     <Compile Include="Utils\ViewUtils.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PopupChonThietBiViewModel.cs" />

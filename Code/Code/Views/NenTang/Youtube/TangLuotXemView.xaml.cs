@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Code.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,10 @@ namespace Code.Views.NenTang.Youtube
     {
         public TangLuotXemView()
         {
+            var viewModel = TangLuotXemViewModel.GetInstance();
             InitializeComponent();
+            this.DataContext = viewModel;
+            deviceStatus.ItemsSource = viewModel.devices;
         }
     }
 }

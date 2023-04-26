@@ -98,28 +98,28 @@ namespace Code.ViewModels
 
         private void ExecuteShowTangTheoDoiViewCommand(object obj)
         {
-            CurrentChildView = new TangLuotTheoDoiViewModel();
+            CurrentChildView = TangLuotTheoDoiViewModel.GetInstance();
             Caption = "Tăng lượt theo dõi";
             Icon = IconChar.ArrowUpRightDots;
         }
 
         private void ExecuteShowTangDangKyViewCommand(object obj)
         {
-            CurrentChildView = new TangLuotDangKyViewModel();
+            CurrentChildView = TangLuotDangKyViewModel.GetInstance();
             Caption = "Tăng lượt đăng ký";
             Icon = IconChar.ArrowUpRightDots;
         }
 
         private void ExecuteShowTangLuotXemViewCommand(object obj)
         {
-            CurrentChildView = new TangLuotXemViewModel();
+            CurrentChildView = TangLuotXemViewModel.GetInstance();
             Caption = "Tăng lượt xem";
             Icon = IconChar.ChartLine;
         }
 
         private void ExecuteShowTaoTaiKhoanFacebookViewCommand(object obj)
         {
-            CurrentChildView = new TaoTaiKhoanFacebookViewModel();
+            CurrentChildView = TaoTaiKhoanFacebookViewModel.GetInstance();
             Caption = "Tạo tài khoản";
             Icon = IconChar.User;
         }

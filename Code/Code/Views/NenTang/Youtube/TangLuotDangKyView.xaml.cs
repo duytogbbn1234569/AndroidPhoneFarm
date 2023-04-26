@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Code.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static Code.ViewModels.ViewModelBase;
 
 namespace Code.Views.NenTang.Youtube
 {
@@ -22,7 +24,10 @@ namespace Code.Views.NenTang.Youtube
     {
         public TangLuotDangKyView()
         {
+            var viewModel = TangLuotDangKyViewModel.GetInstance();
             InitializeComponent();
+            this.DataContext = viewModel;
+            deviceStatus.ItemsSource = viewModel.devices;
         }
     }
 }

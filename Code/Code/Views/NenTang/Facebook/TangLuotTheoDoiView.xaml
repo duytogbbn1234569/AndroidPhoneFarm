@@ -186,7 +186,9 @@
                 Background="#200F53"
                 CornerRadius="10" 
                 Padding="10">
-            <DataGrid ColumnWidth="*" x:Name="dgTaiKhoan" AutoGenerateColumns="False"  IsReadOnly="True"
+            <DataGrid ColumnWidth="*" AutoGenerateColumns="False"  IsReadOnly="True"
+                      ItemsSource="{Binding devices}"
+                      x:Name="deviceStatus"
                 Background="#200F53"
                 BorderThickness="0"
                 CanUserAddRows="False"
@@ -224,9 +226,9 @@
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="STT" Width="50" />
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Mã thiết bị" Width="150" />
-                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Trạng thái" Width="*" />
+                    <DataGridTextColumn Binding="{Binding Stt}" ClipboardContentBinding="{x:Null}" Header="STT" Width="50" />
+                    <DataGridTextColumn Binding="{Binding DeviceId}" ClipboardContentBinding="{x:Null}" Header="Mã thiết bị" Width="150" />
+                    <DataGridTextColumn Binding="{Binding Status}" ClipboardContentBinding="{x:Null}" Header="Trạng thái" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

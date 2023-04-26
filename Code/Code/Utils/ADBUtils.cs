@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -103,6 +104,10 @@ namespace Code.Utils
         public void stopPackage(string package)
         {
             runAdbCommand(String.Format("shell am force-stop {0}", package));
+        }
+        public void startIntent(string intent, string url)
+        {
+            runAdbCommand(String.Format("shell am start -a {0} {1}", intent, url));
         }
     }
 

@@ -12,21 +12,21 @@ using System.Xml.Linq;
 
 namespace Code.Utils.Story
 {
-    public class CreateGoogleAccountScript
+    public class CreateGoogleAccountScript: BaseScript
     {
         private readonly string setting = "com.android.settings";
         private readonly string createAccount = "com.google.android.gms";
         private readonly TaiKhoanGoogle account;
         private readonly ADBUtils adb;
 
-        public CreateGoogleAccountScript(string deviceId, TaiKhoanGoogle account)
+        public CreateGoogleAccountScript(string deviceId, TaiKhoanGoogle account):base()
         {
             this.account = account;
             this.account.IDThietBi = deviceId;
             this.adb = new ADBUtils(deviceId);
         }
 
-        public bool Run()
+        public override bool RunScript()
         {
             var script = new BaseScript();
             var stopAcivity = new BaseScript()
@@ -38,7 +38,7 @@ namespace Code.Utils.Story
                 },
                 onCompleted = () =>
                 {
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
             };
             var startSetting = new BaseScript()
@@ -49,7 +49,7 @@ namespace Code.Utils.Story
                 },
                 onCompleted = () =>
                 {
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
             };
 
@@ -157,10 +157,10 @@ namespace Code.Utils.Story
                         adb.tap(x, y);
                         Thread.Sleep(5000);
                     }
-                    this.adb.swipe(100, 1200, 100, 100);
+                    adb.swipe(100, 1200, 100, 100);
                     needView = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
                     {
-                        return n.Attributes["text"].InnerText == "Next";
+                        return n.Attributes["text"].InnerText == "Skip";
                     }));
                     if (needView.Count > 0)
                     {

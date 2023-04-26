@@ -8,5 +8,19 @@ namespace Code.ViewModels
 {
     public class TaoTaiKhoanFacebookViewModel:ViewModelBase
     {
+        private static TaoTaiKhoanFacebookViewModel INSTANCE = null;
+
+        public static TaoTaiKhoanFacebookViewModel GetInstance()
+        {
+            if (INSTANCE == null)
+            {
+                INSTANCE = new TaoTaiKhoanFacebookViewModel();
+            }
+            return INSTANCE;
+        }
+        public TaoTaiKhoanFacebookViewModel() : base()
+        {
+          
+        }
     }
 }
