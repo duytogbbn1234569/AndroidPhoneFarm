@@ -50,6 +50,10 @@ namespace Code.Utils.Story
             };
             var skipAdv = new BaseScript()
             {
+                init = () =>
+                {
+                    Thread.Sleep(1000);
+                },
                 action = () =>
                 {
                     var screen = this.adb.getCurrentView();
@@ -61,10 +65,10 @@ namespace Code.Utils.Story
                     {
                         var time = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
                         {
-                            bool check = n.Attributes["text"].InnerText.IndexOf("Ad · 1 of 2") > -1;
+                            bool check = n.Attributes["text"].InnerText.IndexOf("Ad · 1 of 2") > 0;
                             if (!check)
                             {
-                                check = n.Attributes["text"].InnerText.IndexOf("Ad · 2 of 2") > -1;
+                                check = n.Attributes["text"].InnerText.IndexOf("Ad · 2 of 2") > 0;
                             }
                             return check;
                         }));
@@ -79,8 +83,8 @@ namespace Code.Utils.Story
                             {
                                 var node = needView.FirstOrDefault();
                                 var b = Bound.ofXMLNode(node);
-                                var x = (b.x + b.h) / 2;
-                                var y = (b.y + b.w) / 2;
+                                var x = b.x + b.h / 2;
+                                var y = b.y + b.w / 2;
                                 adb.tap(x, y);
                             }
                         }
@@ -92,7 +96,7 @@ namespace Code.Utils.Story
             {
                 init = () =>
                 {
-                    Thread.Sleep(thoiGianXem * 1000);
+                    Thread.Sleep((thoiGianXem + 20) * 1000 );
                 }
             };
             script.AddNext(

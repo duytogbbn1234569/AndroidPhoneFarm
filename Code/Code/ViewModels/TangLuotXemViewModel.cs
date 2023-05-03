@@ -105,7 +105,16 @@ namespace Code.ViewModels
             ThoiGianXem = ThoiGianXemToiThieu;
             SoLuotCanTang = 5;
         }
-
+        protected override void ThucHienCongViecTrenThietBi(string idThietBi)
+        {
+            base.ThucHienCongViecTrenThietBi(idThietBi);
+            TrangThai = this.ThanhCong.ToString() + "/" + SoLuotCanTang;
+        }
+        protected override void QuanLyCongViecChoCacThietBi(List<string> thietbi, long soLanLap)
+        {
+            soLanLap = SoLuotCanTang;
+            base.QuanLyCongViecChoCacThietBi(thietbi, soLanLap);
+        }
         protected override void ExecuteShowPopUpWindow(object obj)
         {
             var canExcute = KiemTraURLHopLe(DuongDan);
@@ -122,7 +131,7 @@ namespace Code.ViewModels
 
         private bool KiemTraURLHopLe(string url)
         {
-            var regex = new Regex(@"^(https?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+");
+            var regex = new Regex(@"^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/)(.+)$");
             if (DuongDan != null)
             {
                 if (regex.IsMatch(DuongDan))

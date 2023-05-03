@@ -82,7 +82,7 @@
                                    FontFamily="Moutserrat"
                                    FontWeight="Medium" Height="25"
                                    Margin="20,10,0,0"/>
-                    <TextBlock Text="Trạng thái"
+                    <TextBlock Text="Số lượt đã tăng"
                                Grid.Column="0"
                                Grid.Row="2"
                                    Foreground="{StaticResource titleColor2}"

@@ -9,14 +9,14 @@ using System.Windows;
 
 namespace Code.ViewModels
 {
-    public class PopupChonThietBiViewModel:ViewModelBase
+    public class PopupChonThietBiViewModel : ViewModelBase
     {
         private bool _IsSelected = false;
         private int _SoThuTu { get; set; }
         private string _MaThietBi { get; set; }
         public string MaThietBi
         {
-            get { return _MaThietBi;}
+            get { return _MaThietBi; }
             set { _MaThietBi = value; OnPropertyChanged("MaThietBi"); }
         }
         public bool IsSelected
@@ -30,7 +30,7 @@ namespace Code.ViewModels
         }
         public int SoThuTu
         {
-            get { return _SoThuTu;}
+            get { return _SoThuTu; }
             set { _SoThuTu = value; OnPropertyChanged("SoThuTu"); }
         }
 

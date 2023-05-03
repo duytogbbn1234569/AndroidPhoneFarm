@@ -14,13 +14,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Security.Principal;
+using Code.Models;
 
 namespace Code.ViewModels
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
+        private ThietBi thietBi;
+        private List<string> ThietBiDuocDung = new List<string>();
         public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -108,6 +110,7 @@ namespace Code.ViewModels
 
         protected ViewModelBase()
         {
+            thietBi = ThietBi.GetInstance();
             ShowPopUpWindowCommand = new ViewModelCommand(ExecuteShowPopUpWindow);
             StopAction = new ViewModelCommand(ExecuteStopAction);
         }
@@ -116,7 +119,11 @@ namespace Code.ViewModels
 
         protected virtual void ThemCongViec(List<string> thietbi)
         {
-            Console.WriteLine("Có " + thietbi.Count + " được chọn");
+            foreach (var tb in thietbi)
+            {
+                this.thietBi.danhSachThietBi[tb].trangThai = true;
+                this.ThietBiDuocDung.Add(tb);
+            }
             var thread = new Thread(new ThreadStart(() =>
             {
                 QuanLyCongViecChoCacThietBi(thietbi,0);
@@ -134,12 +141,16 @@ namespace Code.ViewModels
 
         protected virtual void ExecuteStopAction(object obj)
         {
-
             foreach (Thread thread in threads)
             {
                 thread.Interrupt();
                 thread.Abort();
             }
+            foreach (var tb in this.ThietBiDuocDung)
+            {
+                thietBi.danhSachThietBi[tb].trangThai = false;
+            }
+            ThietBiDuocDung = new List<string>();
             this.threads = new List<Thread>();
         }
         protected virtual void QuanLyCongViecChoCacThietBi(List<string> thietbi, long soLanLap)
@@ -148,7 +159,7 @@ namespace Code.ViewModels
             try
             {
                 int nextIndex = 0;
-                soLanLap = soLanLap == 0 ? LaySoLanLapCongViec() + _thanhCong:soLanLap;
+                soLanLap = soLanLap == 0 ? LaySoLanLapCongViec() + _thanhCong : soLanLap + _thanhCong;
                 while (_thanhCong < soLanLap)
                 {
                     if (nextIndex != -1)
@@ -170,8 +181,13 @@ namespace Code.ViewModels
                         }
                     }
                 }
+                foreach (var tb in this.ThietBiDuocDung)
+                {
+                    thietBi.danhSachThietBi[tb].trangThai = false;
+                }
+                ThietBiDuocDung = new List<string>();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 foreach (var thread in jobThreads)
                 {
@@ -222,7 +238,6 @@ namespace Code.ViewModels
 
         protected virtual void ThucHienCongViecTrenThietBi(string idThietBi)
         {
-            Console.WriteLine("Chạy thiết bị " + idThietBi);
             themDongChoBangMutex.WaitOne();
             var status = new DeviceStatus { Stt = devices.Count + 1, DeviceId = idThietBi, Status = DeviceStatus.TrangThai.DANG_CHAY };
             mainDispatcher.Invoke(() =>
@@ -248,10 +263,6 @@ namespace Code.ViewModels
             {
                 status.Status = DeviceStatus.TrangThai.THAT_BAI;
                 TangThatBai();
-            }
-            finally
-            {
-                Console.WriteLine("Chạy xong " + idThietBi);
             }
         }
 

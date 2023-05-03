@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -86,14 +87,19 @@ namespace Code.Utils.Story
             });
             var importPasswordAndChooseNext = importPasswordAndClick();
             var clickSkip = clickSkipOrException();
+            var scrollClickSkip = scrollNotWaitAndClick(new Matcher((XmlNode n) =>
+            {
+                return n.Attributes["text"].InnerText == "Skip";
+            }));
+          
             var clickNext = waitAndClick((XmlNode n) =>
             {
                 return n.Attributes["text"].InnerText == "Next";
             }, 10);
-            var clickAgree = scrollAndClick((XmlNode n) =>
+            var clickAgree = scrollNotWaitAndClick(new Matcher((XmlNode n) =>
             {
                 return n.Attributes["text"].InnerText == "I agree";
-            },2);
+            }));
             script.AddNext(
                 stopAcivity.AddNext(
                     startSetting.AddNext(
@@ -107,8 +113,10 @@ namespace Code.Utils.Story
                                                     importUserNameAndChooseNext.AddNext(
                                                         importPasswordAndChooseNext.AddNext(
                                                             clickSkip.AddNext(
-                                                                clickNext.AddNext(
-                                                                    clickAgree
+                                                                scrollClickSkip.AddNext(
+                                                                    clickNext.AddNext(
+                                                                        clickAgree
+                                                                        )
                                                                     )
                                                                 )
                                                             )
@@ -124,6 +132,39 @@ namespace Code.Utils.Story
                     )
                 );
             return script.RunScript();
+        }
+
+        private BaseScript scrollNotWaitAndClick(Matcher matcher)
+        {
+            XmlNode node = null;
+            DateTime startTime = DateTime.UtcNow;
+            return new BaseScript(-1)
+            {
+                init = () =>
+                {
+                    Thread.Sleep(1000);
+                    startTime = DateTime.UtcNow;
+                },
+                action = () =>
+                {
+                    this.adb.swipe(100, 1400, 100, 100);
+                    var screen = this.adb.getCurrentView();
+                    var needView = ViewUtils.findNode(screen, matcher);
+                    node = needView.FirstOrDefault();
+                    if (node != null)
+                    {
+                        var b = Bound.ofXMLNode(node);
+                        var x = b.x + b.h / 2;
+                        var y = b.y + b.w / 2;
+                        adb.tap(x, y);
+                    }
+                },
+                isError = () =>
+                {
+                    var t = System.DateTime.UtcNow - startTime;
+                    return t.TotalSeconds > 30;
+                }
+            };
         }
 
         private BaseScript clickSkipOrException()
@@ -157,26 +198,12 @@ namespace Code.Utils.Story
                         adb.tap(x, y);
                         Thread.Sleep(5000);
                     }
-                    adb.swipe(100, 1200, 100, 100);
-                    needView = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
-                    {
-                        return n.Attributes["text"].InnerText == "Skip";
-                    }));
-                    if (needView.Count > 0)
-                    {
-                        node = needView.FirstOrDefault();
-                        var b = Bound.ofXMLNode(node);
-                        var x = (b.x + b.h) / 2;
-                        var y = (b.y + b.w) / 2;
-                        adb.tap(x, y);
-                        Thread.Sleep(5000);
-                    }
                 },
                 isError = () =>
                 {
                     var t = System.DateTime.UtcNow - startTime;
                     Console.WriteLine(t.TotalSeconds);
-                    return t.TotalSeconds > 40;
+                    return t.TotalSeconds > 30;
                 }
             };
         }
@@ -228,15 +255,14 @@ namespace Code.Utils.Story
                     var screen = this.adb.getCurrentView();
                     var needView = ViewUtils.findNode(screen, matcher);
                     node = needView.FirstOrDefault();
-                    if (needView.Count() != 0)
+                    if (needView.Count() <= 0)
                     {
                         needView = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
                         {
-                            return n.Attributes["text"].InnerText == "How you'll sign";
+                            return n.Attributes["text"].InnerText.Contains("How you");
                         }));
-                        return needView.Count() != 0;
                     }
-                    return true;
+                    return needView.Count() != 0;
                 },
                 wait = () =>
                 {
@@ -253,7 +279,7 @@ namespace Code.Utils.Story
                         Thread.Sleep(800);
                     }
                     adb.typeText(account.TenDangNhap.ToString());
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.tabEvent();
                     Thread.Sleep(800);
                     adb.enterEvent();
@@ -341,13 +367,13 @@ namespace Code.Utils.Story
                 action = () =>
                 {
                     adb.tabEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.typeText(account.Ho.ToString());
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.tabEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.typeText(account.Ten.ToString());
-                    Thread.Sleep(500);
+                    Thread.Sleep(800);
                     adb.enterEvent();
                 },
                 isError = () =>

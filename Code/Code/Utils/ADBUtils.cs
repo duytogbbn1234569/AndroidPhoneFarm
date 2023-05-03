@@ -39,7 +39,6 @@ namespace Code.Utils
                 output = process.StandardOutput.ReadToEnd();
             }
             process.WaitForExit();
-
             return output;
         }
 

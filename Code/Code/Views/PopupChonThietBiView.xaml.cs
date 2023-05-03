@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Code.Models;
 using Code.Utils;
 using Code.ViewModels;
 
@@ -28,22 +29,24 @@ namespace Code.Views
     public partial class PopupChonThietBiView : Window
     {
         private OnStartAction onStartAction;
+        private static ThietBi thietBi = null;
 
         public PopupChonThietBiView(OnStartAction onStartAction = null)
         {
             this.onStartAction = onStartAction;
             List<PopupChonThietBiViewModel> tmp = new List<PopupChonThietBiViewModel>();
-
-            var devives = ADBUtils.getListDevices();
-            var stt = 1;
-            foreach (var dev in devives)
+            thietBi = ThietBi.GetInstance();
+            int stt = 1;
+            foreach (var dev in thietBi.danhSachThietBi)
             {
-                var item = new PopupChonThietBiViewModel();
-                item.MaThietBi = dev.Item1;
-                item.SoThuTu = stt++;
-                tmp.Add(item);
+                if (dev.Value.trangThai == false)
+                {
+                    var item = new PopupChonThietBiViewModel();
+                    item.MaThietBi = dev.Value.id;
+                    item.SoThuTu = stt++;
+                    tmp.Add(item);
+                }
             }
-
             InitializeComponent();
             dgThietBi.ItemsSource = tmp;
         }
@@ -72,6 +75,7 @@ namespace Code.Views
                 if (c.IsSelected)
                 {
                     thietbi.Add(c.MaThietBi);
+                    thietBi.danhSachThietBi[c.MaThietBi].trangThai = true;
                 }
             }
             if (thietbi.Count != 0) onStartAction?.Invoke(thietbi);

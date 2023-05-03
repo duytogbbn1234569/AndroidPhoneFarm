@@ -91,6 +91,11 @@ namespace Code.ViewModels
             GetInformation = new ViewModelCommand(ExecuteGetInformation);
             SoLuotTang = 2;
         }
+        protected override void QuanLyCongViecChoCacThietBi(List<string> thietbi, long soLanLap)
+        {
+            soLanLap = SoLuotTang;
+            base.QuanLyCongViecChoCacThietBi(thietbi, soLanLap);
+        }
         protected override void ExecuteShowPopUpWindow(object obj)
         {
             var canExcute = KiemTraURLHopLe(DuongDan);
