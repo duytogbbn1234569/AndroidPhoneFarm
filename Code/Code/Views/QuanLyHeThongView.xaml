@@ -7,6 +7,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Image Source="D:\Login-In-WPF-MVVM-C-Sharp-and-SQL-Server\WPF-LoginForm\Images\dashboard-template.png"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+        <TextBlock  Text="HÌNH ẢNH TRANG TRẠI ĐIỆN THOẠI ANDROID"
+                        HorizontalAlignment="Center"
+                        Grid.Row="0"
+                        Foreground="{StaticResource titleColor2}"
+                        FontSize="30"
+                        FontFamily="Moutserrat"
+                        FontWeight="Medium"
+                        VerticalAlignment="Center"
+                        Margin="10,0,0,0"/>
+        <Image Grid.Row="1" Source="D:\AndroidPhoneFarm\Code\Code\Images\phoneFarm.png"></Image>
     </Grid>
 </UserControl>

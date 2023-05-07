@@ -150,6 +150,8 @@
     <Compile Include="Utils\ADBUtils.cs" />
     <Compile Include="Utils\Story\BaseScript.cs" />
     <Compile Include="Utils\Story\CreateGoogleAccountScript.cs" />
+    <Compile Include="Utils\Story\DangKyKenhYoutubeScript.cs" />
+    <Compile Include="Utils\Story\TaoTaiKhoanFacebook.cs" />
     <Compile Include="Utils\Story\XemVideoYoutubeScript.cs" />
     <Compile Include="Utils\ViewUtils.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

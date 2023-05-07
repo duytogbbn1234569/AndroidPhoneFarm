@@ -105,10 +105,10 @@ namespace Code.ViewModels
             ThoiGianXem = ThoiGianXemToiThieu;
             SoLuotCanTang = 5;
         }
-        protected override void ThucHienCongViecTrenThietBi(string idThietBi)
+        protected override void ThucHienCongViecTrenThietBi(string idThietBi, string u)
         {
-            base.ThucHienCongViecTrenThietBi(idThietBi);
-            TrangThai = this.ThanhCong.ToString() + "/" + SoLuotCanTang;
+            base.ThucHienCongViecTrenThietBi(idThietBi, u);
+            TrangThai = this.ThanhCong.ToString();
         }
         protected override void QuanLyCongViecChoCacThietBi(List<string> thietbi, long soLanLap)
         {
@@ -151,9 +151,14 @@ namespace Code.ViewModels
             SoLuotXem = video.Engagement.ViewCount.ToString();
         }
 
-        protected override BaseScript createScriptToRun(string thietbiId)
+        protected override BaseScript createScriptToRun(string thietbiId, string url)
         {
-            return new XemVideoYoutubeScript(thietbiId, DuongDan, ThoiGianXem);
+            return new XemVideoYoutubeScript(thietbiId, url, ThoiGianXem);
+        }
+
+        protected override string getCurrentUrl()
+        {
+            return DuongDan;
         }
     }
 }

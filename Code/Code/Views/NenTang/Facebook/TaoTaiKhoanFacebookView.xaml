@@ -55,14 +55,14 @@
                 Background="#200F53"
                 CornerRadius="10" 
                 Padding="10">
-            <DataGrid ColumnWidth="*" AutoGenerateColumns="False"  IsReadOnly="True" ItemsSource="{Binding devices}"
-                      x:Name="deviceStatus"
+            <DataGrid ColumnWidth="*" x:Name="deviceStatus" AutoGenerateColumns="False"  IsReadOnly="True"
                 Background="#200F53"
                 BorderThickness="0"
                 CanUserAddRows="False"
                 CanUserResizeColumns="False"
                 CanUserResizeRows="False"
                 HeadersVisibility="Column"
+                ItemsSource="{Binding devices}"
                 GridLinesVisibility="None">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
@@ -110,7 +110,7 @@
                                    FontFamily="Moutserrat"
                                    FontWeight="Medium" Height="40"
                                    Margin="20,10,0,0"/>
-                    <TextBlock Text=""
+                    <TextBlock Text="{Binding ThanhCong}"
                                    Foreground="{StaticResource titleColor2}"
                                    FontSize="14"
                                    FontFamily="Moutserrat"
@@ -124,14 +124,13 @@
                                    FontFamily="Moutserrat"
                                    FontWeight="Medium" Height="40"
                                    Margin="20,0,0,0"/>
-                    <TextBlock Text=""
+                    <TextBlock Text="{Binding ThatBai}"
                                    Foreground="{StaticResource titleColor2}"
                                    FontSize="14"
                                    FontFamily="Moutserrat"
                                    FontWeight="Medium" Height="40"
                                    Margin="36,0,0,0"/>
                 </StackPanel>
-
             </StackPanel>
         </Grid>
     </Grid>

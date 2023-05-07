@@ -1,4 +1,5 @@
-﻿using Code.Utils;
+﻿using Code.Models;
+using Code.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,6 +101,7 @@ namespace Code.Utils.Story
             {
                 return n.Attributes["text"].InnerText == "I agree";
             }));
+            var addAccountToDB = addAccount();
             script.AddNext(
                 stopAcivity.AddNext(
                     startSetting.AddNext(
@@ -131,7 +133,19 @@ namespace Code.Utils.Story
                         )
                     )
                 );
+
             return script.RunScript();
+        }
+
+        private BaseScript addAccount()
+        {
+            return new BaseScript(-1)
+            {
+                action = () =>
+                {
+                    DataProvider.Ins.db.TaiKhoanGoogles.Add(account);
+                }
+            };
         }
 
         private BaseScript scrollNotWaitAndClick(Matcher matcher)
@@ -276,12 +290,12 @@ namespace Code.Utils.Story
                         var x = 50;
                         var y = b.y + b.w / 2;
                         adb.tap(x, y);
-                        Thread.Sleep(800);
+                        Thread.Sleep(1000);
                     }
                     adb.typeText(account.TenDangNhap.ToString());
                     Thread.Sleep(1000);
                     adb.tabEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.enterEvent();
                 },
                 isError = () =>
@@ -309,7 +323,7 @@ namespace Code.Utils.Story
                 action = () =>
                 {
                     adb.tabEvent();
-                    Thread.Sleep(500);
+                    Thread.Sleep(1000);
                     adb.enterEvent();
                     int tabNum = account.ThangSinh;
                     for (int i = 0; i < tabNum; i++)
@@ -318,17 +332,17 @@ namespace Code.Utils.Story
                         Thread.Sleep(200);
                     }
                     adb.enterEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.tabEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.typeText(account.NgaySinh.ToString());
                     adb.tabEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.typeText(account.NamSinh.ToString());
                     adb.tabEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.enterEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     tabNum = account.GioiTinh;
                     for (int i = 0; i < tabNum; i++)
                     {
@@ -336,9 +350,9 @@ namespace Code.Utils.Story
                         Thread.Sleep(500);
                     }
                     adb.enterEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.tabEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.enterEvent();
                 },
                 isError = () =>
@@ -367,13 +381,13 @@ namespace Code.Utils.Story
                 action = () =>
                 {
                     adb.tabEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.typeText(account.Ho.ToString());
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.tabEvent();
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.typeText(account.Ten.ToString());
-                    Thread.Sleep(800);
+                    Thread.Sleep(1000);
                     adb.enterEvent();
                 },
                 isError = () =>
@@ -399,7 +413,7 @@ namespace Code.Utils.Story
                 },
                 wait = () =>
                 {
-                    this.adb.swipe(100, 800, 100, 100);
+                    this.adb.swipe(100, 1000, 100, 100);
                     maxTry--;
                 },
                 action = () =>

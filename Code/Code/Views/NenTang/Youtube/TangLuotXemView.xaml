@@ -115,8 +115,10 @@
                              Grid.Row="3"
                                    Foreground="{StaticResource titleColor2}"
                                    FontSize="14"
+                               Width="300"
+                             Height="30"
                                    FontFamily="Moutserrat"
-                                   FontWeight="Medium" Height="25"/>
+                                   FontWeight="Medium" />
                 </Grid>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -230,6 +232,7 @@
                     <DataGridTextColumn Binding="{Binding Stt}" ClipboardContentBinding="{x:Null}" Header="STT" Width="50" />
                     <DataGridTextColumn Binding="{Binding DeviceId}" ClipboardContentBinding="{x:Null}" Header="Mã thiết bị" Width="150" />
                     <DataGridTextColumn Binding="{Binding Status}" ClipboardContentBinding="{x:Null}" Header="Trạng thái" Width="*" />
+                    <DataGridTextColumn Binding="{Binding Url}" ClipboardContentBinding="{x:Null}" Header="Đường Dẫn" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

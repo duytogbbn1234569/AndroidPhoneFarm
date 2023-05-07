@@ -52,7 +52,7 @@ namespace Code.Utils.Story
             {
                 init = () =>
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(5000);
                 },
                 action = () =>
                 {
@@ -65,20 +65,17 @@ namespace Code.Utils.Story
                     {
                         var time = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
                         {
-                            bool check = n.Attributes["text"].InnerText.IndexOf("Ad · 1 of 2") > 0;
-                            if (!check)
-                            {
-                                check = n.Attributes["text"].InnerText.IndexOf("Ad · 2 of 2") > 0;
-                            }
-                            return check;
+                            return n.Attributes["text"].InnerText.IndexOf("Ad") != -1;
                         }));
                         if (time.Count > 0)
                         {
                             var tmp = time.FirstOrDefault();
                             string txt = tmp.Attributes["text"].InnerText;
-                            int vt = txt.LastIndexOf(":");
-                            int minutes = int.Parse(txt.Substring(vt-3, vt-2));
-                            int seconds = int.Parse(txt.Substring(vt+1, vt+2));
+                            int vt = txt.IndexOf(":");
+                            string txtPhut = txt.Substring(vt - 2, 2);
+                            string txtGiay = txt.Substring(vt + 1, 2);
+                            int minutes = int.Parse(txtPhut);
+                            int seconds = int.Parse(txtGiay);
                             if (minutes > 0 || seconds > 10)
                             {
                                 var node = needView.FirstOrDefault();
@@ -96,14 +93,16 @@ namespace Code.Utils.Story
             {
                 init = () =>
                 {
-                    Thread.Sleep((thoiGianXem + 20) * 1000 );
+                    Thread.Sleep((thoiGianXem + 20) * 1000);
                 }
             };
             script.AddNext(
                 stopAcivity.AddNext(
                     startYoutube.AddNext(
                         skipAdv.AddNext(
-                            wait
+                            skipAdv.AddNext(
+                                wait
+                                )
                             )
                         )
                     )

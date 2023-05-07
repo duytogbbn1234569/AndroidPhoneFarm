@@ -202,6 +202,7 @@
                     <DataGridTextColumn Binding="{Binding Stt}" ClipboardContentBinding="{x:Null}" Header="STT" Width="50" />
                     <DataGridTextColumn Binding="{Binding DeviceId}" ClipboardContentBinding="{x:Null}" Header="Mã thiết bị" Width="150" />
                     <DataGridTextColumn Binding="{Binding Status}" ClipboardContentBinding="{x:Null}" Header="Trạng thái" Width="*" />
+                    <DataGridTextColumn Binding="{Binding Url}" ClipboardContentBinding="{x:Null}" Header="Đường Dẫn" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

@@ -1,8 +1,10 @@
-﻿using Code.Utils;
+﻿using AngleSharp.Common;
+using Code.Utils;
 using Code.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +14,26 @@ namespace Code.Models
     public class ThongTinThietBi
     {
         public string id;
-        public bool trangThai;
+        public bool trangThai
+        {
+            set
+            {
+                
+            }
+        }
+        private HashSet<string> thietBiDuocSuDung = new HashSet<string>();
+
+        public ThongTinThietBi(HashSet<string> set)
+        {
+
+        }
     }
     public class ThietBi
     {
-        public Dictionary<String, ThongTinThietBi> danhSachThietBi = null;
+        public List<string> danhSachThietBi = new List<string>();
+
+        private HashSet<string> thietBiDuocSuDung = new HashSet<string>();
+
         public ThietBi()
         {
 
@@ -28,30 +45,35 @@ namespace Code.Models
             if (INSTANCE == null)
             {
                 INSTANCE = new ThietBi();
-                INSTANCE.danhSachThietBi = INSTANCE.GetThietBi();
+                INSTANCE.Refresh();
             }
             return INSTANCE;
-        }
-        public Dictionary<String, ThongTinThietBi> GetThietBi()
-        {
-            if (danhSachThietBi == null)
-            {
-                Refresh();
-            }
-            return danhSachThietBi;
         }
 
         public void Refresh()
         {
-            danhSachThietBi = new Dictionary<String, ThongTinThietBi>();
+            danhSachThietBi = new List<string>();
             var devives = ADBUtils.getListDevices();
             foreach (var item in devives)
             {
-                ThongTinThietBi thietBi = new ThongTinThietBi();
-                thietBi.id = item.Item1;
-                thietBi.trangThai = false;
-                danhSachThietBi.Add(item.Item1, thietBi);
+                danhSachThietBi.Add(item.Item1);
+            }
+        }
 
+        public bool isUsed(string id)
+        {
+            return thietBiDuocSuDung.Contains(id);
+        }
+
+        public void setUse(string thietbi, bool used)
+        {
+            if (used)
+            {
+                thietBiDuocSuDung.Add(thietbi);
+            }
+            else
+            {
+                thietBiDuocSuDung.Remove(thietbi);
             }
         }
     }

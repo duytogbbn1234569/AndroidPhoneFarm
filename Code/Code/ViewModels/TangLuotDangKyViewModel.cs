@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Code.Utils.Story;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -111,7 +112,8 @@ namespace Code.ViewModels
 
         private bool KiemTraURLHopLe(string url)
         {
-            var regex = new Regex(@"^(https?\:\/\/)?(www\.)?youtube\.com\/(c|channel)\/(?:@)?([a-zA-Z0-9_-]{1,})$");
+            Regex regex = new Regex(@"^(?:https:\/\/)?(?:www\.)?youtube\.com\/(?:(?:channel\/(?<channel_id>[A-Za-z0-9_-]{24}))|(?:@(?<custom_name>[A-Za-z0-9_-]+)))$");
+
             if (DuongDan != null)
             {
                 if (regex.IsMatch(DuongDan))
@@ -123,17 +125,33 @@ namespace Code.ViewModels
         }
         private async void ExecuteGetInformation(object obj)
         {
-
-            var youtube = new YoutubeClient();
-            bool flag = true;
-            if (DuongDan.IndexOf("@") >= 0)
+            var canExcute = KiemTraURLHopLe(DuongDan);
+            if (canExcute)
             {
-                flag = false;
+                var youtube = new YoutubeClient();
+                bool flag = true;
+                if (DuongDan.IndexOf("@") >= 0)
+                {
+                    flag = false;
+                }
+                var channel = flag == true ? await youtube.Channels.GetAsync(DuongDan) : await youtube.Channels.GetByHandleAsync(DuongDan);
+                TenKenh = channel.Title;
+                var videos = await youtube.Channels.GetUploadsAsync(@"https://www.youtube.com/channel/" + channel.Id);
+                SoVideo = videos.Count().ToString();
             }
-            var channel = flag == true ? await youtube.Channels.GetAsync(DuongDan) : await youtube.Channels.GetByHandleAsync(DuongDan);
-            TenKenh = channel.Title;
-            var videos = await youtube.Channels.GetUploadsAsync(@"https://www.youtube.com/channel/" + channel.Id);
-            SoVideo = videos.Count().ToString();
+            else
+            {
+                MessageBox.Show("Thông tin nhập sai vui lòng nhập lại");
+            }
+           
+        }
+        protected override BaseScript createScriptToRun(string thietbiId, string url)
+        {
+            return new DangKyKenhYoutubeScript(thietbiId, url);
+        }
+        protected override string getCurrentUrl()
+        {
+            return DuongDan;
         }
     }
 }

@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.Security.Principal;
 using Code.Models;
+using System.Windows.Markup;
 
 namespace Code.ViewModels
 {
@@ -40,6 +41,7 @@ namespace Code.ViewModels
             private int stt;
             private string deviceId;
             private TrangThai status;
+            private string url;
 
             public class TrangThai
             {
@@ -68,6 +70,18 @@ namespace Code.ViewModels
                 {
                     this.stt = value;
                     this.OnPropertyChanged("Stt");
+                }
+            }
+            public string Url
+            {
+                get
+                {
+                    return this.url;
+                }
+                set
+                {
+                    this.url = value;
+                    this.OnPropertyChanged("Url");
                 }
             }
             public TrangThai Status
@@ -121,7 +135,7 @@ namespace Code.ViewModels
         {
             foreach (var tb in thietbi)
             {
-                this.thietBi.danhSachThietBi[tb].trangThai = true;
+                this.thietBi.setUse(tb, true);
                 this.ThietBiDuocDung.Add(tb);
             }
             var thread = new Thread(new ThreadStart(() =>
@@ -148,31 +162,44 @@ namespace Code.ViewModels
             }
             foreach (var tb in this.ThietBiDuocDung)
             {
-                thietBi.danhSachThietBi[tb].trangThai = false;
+                thietBi.setUse(tb, false);
             }
             ThietBiDuocDung = new List<string>();
             this.threads = new List<Thread>();
         }
         protected virtual void QuanLyCongViecChoCacThietBi(List<string> thietbi, long soLanLap)
         {
-            Thread[] jobThreads = new Thread[thietbi.Count];
+            List<Thread> jobThreads = new List<Thread>();
+            foreach (var tb in thietbi)
+            {
+                jobThreads.Add(null);
+            }
             try
             {
+                var url = getCurrentUrl().ToString();
                 int nextIndex = 0;
                 soLanLap = soLanLap == 0 ? LaySoLanLapCongViec() + _thanhCong : soLanLap + _thanhCong;
                 while (_thanhCong < soLanLap)
                 {
                     if (nextIndex != -1)
                     {
+                        if (!this.thietBi.danhSachThietBi.Contains(thietbi[nextIndex]))
+                        {
+                            thietBi.setUse(thietbi[nextIndex], false);
+                            thietbi.RemoveAt(nextIndex);
+                            jobThreads.RemoveAt(nextIndex);
+                            nextIndex = -1;
+                            continue;
+                        }
                         jobThreads[nextIndex] = new Thread(new ThreadStart(() =>
                         {
-                            ThucHienCongViecTrenThietBi(thietbi[nextIndex]);
+                            ThucHienCongViecTrenThietBi(thietbi[nextIndex], url);
                         }));
                         jobThreads[nextIndex].Start();
                     }
                     Thread.Sleep(2000);
                     nextIndex = -1;
-                    for (int i = 0; i < jobThreads.Length; i++)
+                    for (int i = 0; i < jobThreads.Count; i++)
                     {
                         if (jobThreads[i] == null || !jobThreads[i].IsAlive)
                         {
@@ -180,10 +207,15 @@ namespace Code.ViewModels
                             break;
                         }
                     }
+
+                    if (jobThreads.Count == 0)
+                    {
+                        break;
+                    }
                 }
                 foreach (var tb in this.ThietBiDuocDung)
                 {
-                    thietBi.danhSachThietBi[tb].trangThai = false;
+                    thietBi.setUse(tb, false);
                 }
                 ThietBiDuocDung = new List<string>();
             }
@@ -236,16 +268,16 @@ namespace Code.ViewModels
 
         private Mutex themDongChoBangMutex = new Mutex();
 
-        protected virtual void ThucHienCongViecTrenThietBi(string idThietBi)
+        protected virtual void ThucHienCongViecTrenThietBi(string idThietBi, string url)
         {
             themDongChoBangMutex.WaitOne();
-            var status = new DeviceStatus { Stt = devices.Count + 1, DeviceId = idThietBi, Status = DeviceStatus.TrangThai.DANG_CHAY };
+            var status = new DeviceStatus { Stt = devices.Count + 1, DeviceId = idThietBi, Status = DeviceStatus.TrangThai.DANG_CHAY, Url = url };
             mainDispatcher.Invoke(() =>
             {
                 devices.Add(status);
             });
             themDongChoBangMutex.ReleaseMutex();
-            var job = createScriptToRun(idThietBi);
+            var job = createScriptToRun(idThietBi, url);
             try
             {
                 if (job.RunScript())
@@ -266,7 +298,12 @@ namespace Code.ViewModels
             }
         }
 
-        protected virtual BaseScript createScriptToRun(string thietbiId)
+        protected virtual string getCurrentUrl()
+        {
+            return "";
+        }
+
+        protected virtual BaseScript createScriptToRun(string thietbiId, string url)
         {
             return new BaseScript();
         }

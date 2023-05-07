@@ -36,7 +36,7 @@ namespace Code.ViewModels
         {
 
         }
-        protected override BaseScript createScriptToRun(string thietbiId)
+        protected override BaseScript createScriptToRun(string thietbiId, string url)
         {
             var prefix = RandomString(10);
             Random rnd = new Random();

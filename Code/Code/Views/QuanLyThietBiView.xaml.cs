@@ -38,14 +38,15 @@ namespace Code.Views
         private void Load()
         {
             List<QuanLyThietBiViewModel> tmp = new List<QuanLyThietBiViewModel>();
-            var devives = ADBUtils.getListDevices();
+            var thietbi = ThietBi.GetInstance();
+            thietbi.Refresh();
             var stt = 1;
-            foreach (var dev in devives)
+            foreach (var dev in thietbi.danhSachThietBi)
             {
                 var item = new QuanLyThietBiViewModel();
-                item.MaThietBi = dev.Item1;
+                item.MaThietBi = dev;
                 item.SoThuTu = stt++;
-                item.TrangThai = dev.Item2;
+                item.TrangThai = thietbi.isUsed(dev) ? "Được sử dụng" : "Không được sử dụng";
                 tmp.Add(item);
             }
             dgThietBi.ItemsSource = tmp;

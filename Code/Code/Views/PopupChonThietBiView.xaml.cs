@@ -39,10 +39,10 @@ namespace Code.Views
             int stt = 1;
             foreach (var dev in thietBi.danhSachThietBi)
             {
-                if (dev.Value.trangThai == false)
+                if (!thietBi.isUsed(dev))
                 {
                     var item = new PopupChonThietBiViewModel();
-                    item.MaThietBi = dev.Value.id;
+                    item.MaThietBi = dev;
                     item.SoThuTu = stt++;
                     tmp.Add(item);
                 }
@@ -75,7 +75,7 @@ namespace Code.Views
                 if (c.IsSelected)
                 {
                     thietbi.Add(c.MaThietBi);
-                    thietBi.danhSachThietBi[c.MaThietBi].trangThai = true;
+                    thietBi.setUse(c.MaThietBi, true);
                 }
             }
             if (thietbi.Count != 0) onStartAction?.Invoke(thietbi);
