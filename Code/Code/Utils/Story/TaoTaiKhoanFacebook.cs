@@ -1,7 +1,9 @@
 ﻿using AngleSharp.Dom;
+using Code.Models;
 using Code.Properties;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -14,7 +16,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Code.Utils.Story
 {
-    internal class TaoTaiKhoanFacebook: BaseScript
+    class TaoTaiKhoanFacebook: BaseScript
     {
         private readonly string facebook = "com.facebook.katana";
         private readonly string login = "com.facebook.katana/.LoginActivity";
@@ -29,10 +31,31 @@ namespace Code.Utils.Story
             this.adb = new ADBUtils(deviceId);
         }
 
-        public override bool RunScript()
+        protected override void OnCompleted()
         {
-            var script = new BaseScript();
-            var stopAcivity = new BaseScript()
+            account.TrangThai = AccountStatus.CREATED;
+            DataProvider.Ins.db.TaiKhoanFacebooks.AddOrUpdate(this.account);
+            DataProvider.Ins.db.SaveChanges();
+        }
+
+        protected override void Init()
+        {
+            account.TrangThai = AccountStatus.CREATING;
+            DataProvider.Ins.db.TaiKhoanFacebooks.AddOrUpdate(this.account);
+            DataProvider.Ins.db.SaveChanges();
+        }
+
+        protected override void OnFailed()
+        {
+            account.TrangThai = AccountStatus.FAILED;
+            DataProvider.Ins.db.TaiKhoanFacebooks.AddOrUpdate(this.account);
+            DataProvider.Ins.db.SaveChanges();
+        }
+        
+        protected override bool IsCompleted()
+        {
+            var script = new BaseScriptComponent();
+            var stopAcivity = new BaseScriptComponent()
             {
                 action = () =>
                 {
@@ -43,7 +66,7 @@ namespace Code.Utils.Story
                     Thread.Sleep(500);
                 }
             };
-            var startFacebook = new BaseScript()
+            var startFacebook = new BaseScriptComponent()
             {
                 action = () =>
                 {
@@ -158,10 +181,10 @@ namespace Code.Utils.Story
             return script.RunScript();
         }
 
-        private BaseScript checkLogout()
+        private BaseScriptComponent checkLogout()
         {
             XmlNode node = null;
-            return new BaseScript(-1)
+            return new BaseScriptComponent(-1)
             {
                 action = () =>
                 {
@@ -221,9 +244,9 @@ namespace Code.Utils.Story
             };
         }
 
-        private BaseScript inputInfo(string text)
+        private BaseScriptComponent inputInfo(string text)
         {
-            return new BaseScript(-1)
+            return new BaseScriptComponent(-1)
             {
 
                 action = () =>
@@ -234,10 +257,10 @@ namespace Code.Utils.Story
             };
         }
 
-        private BaseScript inputText(Matcher matcher, double maxWait, string text, int clickNumber = 1)
+        private BaseScriptComponent inputText(Matcher matcher, double maxWait, string text, int clickNumber = 1)
         {
             XmlNode node = null;
-            return new BaseScript(-1)
+            return new BaseScriptComponent(-1)
             {
                 init = () =>
                 {
@@ -266,11 +289,11 @@ namespace Code.Utils.Story
             };
         }
 
-        private BaseScript waitAndClick(Matcher matcher, double maxWait, int clickNumber = 1)
+        private BaseScriptComponent waitAndClick(Matcher matcher, double maxWait, int clickNumber = 1)
         {
             DateTime startTime = DateTime.UtcNow;
             XmlNode node = null;
-            return new BaseScript(-1)
+            return new BaseScriptComponent(-1)
             {
                 init = () =>
                 {
@@ -309,7 +332,7 @@ namespace Code.Utils.Story
                 }
             };
         }
-        private BaseScript setBirthDay(Matcher matcher, Matcher matcherNumber, Matcher matcherSet, int maxTry = 12)
+        private BaseScriptComponent setBirthDay(Matcher matcher, Matcher matcherNumber, Matcher matcherSet, int maxTry = 12)
         {
             XmlNode node = null;
             XmlNode number = null;
@@ -318,7 +341,7 @@ namespace Code.Utils.Story
             var ySetButton = 0;
             var xNumber = 0;
             var yNumber = 0;
-            return new BaseScript(maxTry)
+            return new BaseScriptComponent(maxTry)
             {
                 init = () =>
                 {

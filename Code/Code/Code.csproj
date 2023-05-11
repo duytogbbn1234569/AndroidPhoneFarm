@@ -139,6 +139,7 @@
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\DataProvider.cs" />
+    <Compile Include="Utils\Account.cs" />
     <Compile Include="Models\ThietBi.cs" />
     <Compile Include="Models\ThongTinTaiKhoan.cs" />
     <Compile Include="TaiKhoanFacebook.cs">
@@ -148,9 +149,13 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\ADBUtils.cs" />
+    <Compile Include="Utils\Story\BaseScriptComponent.cs" />
     <Compile Include="Utils\Story\BaseScript.cs" />
     <Compile Include="Utils\Story\CreateGoogleAccountScript.cs" />
     <Compile Include="Utils\Story\DangKyKenhYoutubeScript.cs" />
+    <Compile Include="Utils\Story\SwitchToYoutubeAccountByEmail.cs" />
+    <Compile Include="Utils\Story\TakeFacebookCode.cs" />
+    <Compile Include="Utils\Story\TakeLatestEmail.cs" />
     <Compile Include="Utils\Story\TaoTaiKhoanFacebook.cs" />
     <Compile Include="Utils\Story\XemVideoYoutubeScript.cs" />
     <Compile Include="Utils\ViewUtils.cs" />

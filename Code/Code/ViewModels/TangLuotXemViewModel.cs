@@ -105,10 +105,11 @@ namespace Code.ViewModels
             ThoiGianXem = ThoiGianXemToiThieu;
             SoLuotCanTang = 5;
         }
-        protected override void ThucHienCongViecTrenThietBi(string idThietBi, string u)
+        protected override bool ThucHienCongViecTrenThietBi(string idThietBi, string u)
         {
-            base.ThucHienCongViecTrenThietBi(idThietBi, u);
+            var r = base.ThucHienCongViecTrenThietBi(idThietBi, u);
             TrangThai = this.ThanhCong.ToString();
+            return r;
         }
         protected override void QuanLyCongViecChoCacThietBi(List<string> thietbi, long soLanLap)
         {

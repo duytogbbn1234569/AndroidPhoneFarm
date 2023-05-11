@@ -6,18 +6,9 @@ using System.Threading.Tasks;
 
 namespace Code.Utils.Story
 {
-    public delegate void Action();
-    public delegate bool CanAction();
-    public delegate void Wait();
-    public delegate void OnCompleted();
-    public delegate bool IsCompleted();
-    public delegate bool IsError();
-    public delegate bool Candidate();
-    public delegate void Init();
-
     public class BaseScript
     {
-        private int tryCounter;
+        protected int tryCounter;
 
         public BaseScript(int maxTry = 1)
         {
@@ -26,44 +17,77 @@ namespace Code.Utils.Story
 
         public virtual bool RunScript()
         {
-            init.Invoke();
-            while (!isError.Invoke() && !canAction.Invoke())
+            Init();
+            bool canAction = false;
+            bool isError = false;
+            while (!(isError = IsError()) && !(canAction = CanAction()))
             {
-                wait.Invoke();
+                Wait();
                 if (--tryCounter == 0)
                 {
                     break;
                 }
             }
-            if (canAction.Invoke())
+            if (!isError && canAction)
             {
-                action.Invoke();
-                if (isCompleted.Invoke())
+                Action();
+                if (IsCompleted())
                 {
-                    onCompleted.Invoke();
+                    OnCompleted();
                     return chooseAndRunNextScript();
                 }
-                else return false;
+                else
+                {
+                    OnFailed();
+                    return false;
+                }
             }
             return false;
         }
 
-        public Init init = () => { };
+        protected virtual void Init()
+        {
+        }
 
-        public Wait wait = () => { };
+        protected virtual void Wait()
+        {
+        }
 
-        public Action action = () => { };
+        protected virtual void Action()
+        {
+        }
 
-        public CanAction canAction = () => true;
+        protected virtual bool CanAction()
+        {
+            return true;
+        }
 
-        public IsCompleted isCompleted = () => true;
+        protected virtual bool IsCompleted()
+        {
+            return true;
+        }
 
-        public IsError isError = () => false;
+        protected virtual bool IsError()
+        {
+            return false;
+        }
 
-        public OnCompleted onCompleted = () => { };
+        protected virtual void OnCompleted()
+        {
+        }
 
-        private List<Candidate> _candidates = new List<Candidate>();
-        private List<BaseScript> _scripts = new List<BaseScript>();
+        protected virtual void OnFailed()
+        {
+
+        }
+
+        public virtual void OnTerminateOrPause()
+        {
+            this.OnFailed();
+        }
+
+        protected List<Candidate> _candidates = new List<Candidate>();
+        protected List<BaseScript> _scripts = new List<BaseScript>();
 
         public BaseScript AddNext(BaseScript nextScript, Candidate choose)
         {
@@ -79,7 +103,7 @@ namespace Code.Utils.Story
             return this;
         }
 
-        private bool chooseAndRunNextScript()
+        protected virtual bool chooseAndRunNextScript()
         {
             int index = 0;
             foreach (Candidate candidate in this._candidates)
@@ -95,11 +119,6 @@ namespace Code.Utils.Story
                 return this._scripts[index].RunScript();
             }
             else return this._candidates.Count == 0;
-        }
-
-        internal BaseScript AddNext(object clickOwnUsernameAndChooseNext)
-        {
-            throw new NotImplementedException();
         }
     }
 }

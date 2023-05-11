@@ -52,7 +52,7 @@ namespace Code.Views.QuanLyTaiKhoan
             var objectList = DataProvider.Ins.db.TaiKhoanGoogles;
             foreach (var item in objectList)
             {
-                if (item.TrangThai != 1)
+                if (AccountStatus.IsError(item.TrangThai))
                 {
                     DataProvider.Ins.db.TaiKhoanGoogles.Remove(item);
                 }
@@ -74,7 +74,7 @@ namespace Code.Views.QuanLyTaiKhoan
                 taiKhoan.HoTen = string.Format("{0} {1}", item.Ho, item.Ten);
                 taiKhoan.GioiTinh = item.GioiTinh == 0 ? "Nữ" : item.GioiTinh == 1 ? "Nam" : "Không";
                 taiKhoan.NgaySinh = string.Format("{0}/{1}/{2}", item.NgaySinh, item.ThangSinh, item.NamSinh);
-                taiKhoan.TrangThai = item.TrangThai == 1 ? "Truy cập" : "Lỗi";
+                taiKhoan.TrangThai = AccountStatus.GetDescription(item.TrangThai);
                 taiKhoan.MaThietBi = item.IDThietBi;
                 taiKhoans.Add(taiKhoan);
             }

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PhoneFarmModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="TaiKhoanFacebook">
+    <Key>
+      <PropertyRef Name="IDTaiKhoanF" />
+    </Key>
+    <Property Name="IDTaiKhoanF" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenDangNhap" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="MatKhau" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Ho" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Ten" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="NgaySinh" Type="Int32" Nullable="false" />
+    <Property Name="ThangSinh" Type="Int32" Nullable="false" />
+    <Property Name="NamSinh" Type="Int32" Nullable="false" />
+    <Property Name="GioiTinh" Type="Int32" Nullable="false" />
+    <Property Name="TrangThai" Type="Int32" Nullable="false" />
+    <Property Name="IDThietBi" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="IDTaiKhoanG" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TaiKhoanGoogle" Relationship="Self.FK_TaiKhoanFacebook_ToTable" FromRole="TaiKhoanFacebook" ToRole="TaiKhoanGoogle" />
+  </EntityType>
+  <EntityType Name="TaiKhoanGoogle">
+    <Key>
+      <PropertyRef Name="IDTaiKhoanG" />
+    </Key>
+    <Property Name="IDTaiKhoanG" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenDangNhap" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="MatKhau" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="Ho" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Ten" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="NgaySinh" Type="Int32" Nullable="false" />
+    <Property Name="ThangSinh" Type="Int32" Nullable="false" />
+    <Property Name="NamSinh" Type="Int32" Nullable="false" />
+    <Property Name="GioiTinh" Type="Int32" Nullable="false" />
+    <Property Name="TrangThai" Type="Int32" Nullable="false" />
+    <Property Name="IDThietBi" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="TaiKhoanFacebooks" Relationship="Self.FK_TaiKhoanFacebook_ToTable" FromRole="TaiKhoanGoogle" ToRole="TaiKhoanFacebook" />
+  </EntityType>
+  <Association Name="FK_TaiKhoanFacebook_ToTable">
+    <End Role="TaiKhoanGoogle" Type="Self.TaiKhoanGoogle" Multiplicity="1" />
+    <End Role="TaiKhoanFacebook" Type="Self.TaiKhoanFacebook" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiKhoanGoogle">
+        <PropertyRef Name="IDTaiKhoanG" />
+      </Principal>
+      <Dependent Role="TaiKhoanFacebook">
+        <PropertyRef Name="IDTaiKhoanG" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PhoneFarmEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="TaiKhoanFacebooks" EntityType="Self.TaiKhoanFacebook" />
+    <EntitySet Name="TaiKhoanGoogles" EntityType="Self.TaiKhoanGoogle" />
+    <AssociationSet Name="FK_TaiKhoanFacebook_ToTable" Association="Self.FK_TaiKhoanFacebook_ToTable">
+      <End Role="TaiKhoanGoogle" EntitySet="TaiKhoanGoogles" />
+      <End Role="TaiKhoanFacebook" EntitySet="TaiKhoanFacebooks" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

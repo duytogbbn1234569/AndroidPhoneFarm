@@ -18,16 +18,21 @@ namespace Code.Utils.Story
         private readonly ADBUtils adb;
         private readonly string intent = "android.intent.action.VIEW";
         private readonly string youtube = "com.google.android.youtube";
+        private readonly string account;
         private readonly string url;
-        public DangKyKenhYoutubeScript(string deviceId, string url) : base()
+        private bool isDone = false;
+        public DangKyKenhYoutubeScript(string deviceId, string url, string account) : base()
         {
+            this.account = account;
             this.url = url;
             this.adb = new ADBUtils(deviceId);
         }
-        public override bool RunScript()
+
+        protected override void Action()
         {
-            var script = new BaseScript();
-            var stopAcivity = new BaseScript()
+            var script = new SwitchToYoutubeAccountByEmail(adb, account);
+
+            var stopAcivity = new BaseScriptComponent()
             {
                 action = () =>
                 {
@@ -38,7 +43,7 @@ namespace Code.Utils.Story
                     Thread.Sleep(500);
                 }
             };
-            var startYoutubeChannel = new BaseScript()
+            var startYoutubeChannel = new BaseScriptComponent()
             {
                 action = () =>
                 {
@@ -50,7 +55,69 @@ namespace Code.Utils.Story
                     Thread.Sleep(500);
                 }
             };
-            var startYoutube= new BaseScript()
+            var clickSubrice = new BaseScriptComponent()
+            {
+                canAction = () =>
+                {
+                    node = null;
+                    var screen = this.adb.getCurrentView();
+                    var needView = ViewUtils.findNode(screen, new Matcher((XmlNode n) =>
+                    {
+                        return n.Attributes["content-desc"].InnerText.IndexOf("Subscribe") != -1;
+                    }));
+                    node = needView.FirstOrDefault();
+                    return needView.Count > 0;
+                },
+                action = () =>
+                {
+                    var b = Bound.ofXMLNode(node);
+                    var x = b.x + b.h / 2;
+                    var y = b.y + b.w / 2;
+                    adb.tap(x, y);
+                    Thread.Sleep(2000);
+                }
+            };
+
+            script.AddNext(
+                stopAcivity.AddNext(
+                    startYoutubeChannel.AddNext(
+                        clickSubrice)));
+
+            isDone = script.RunScript();
+        }
+
+        protected override bool IsCompleted()
+        {
+            return isDone;
+        }
+
+        private bool Old()
+        {
+            var script = new BaseScriptComponent();
+            var stopAcivity = new BaseScriptComponent()
+            {
+                action = () =>
+                {
+                    adb.stopPackage(youtube);
+                },
+                onCompleted = () =>
+                {
+                    Thread.Sleep(500);
+                }
+            };
+            var startYoutubeChannel = new BaseScriptComponent()
+            {
+                action = () =>
+                {
+                    adb.startIntent(intent, url);
+                    Thread.Sleep(5000);
+                },
+                onCompleted = () =>
+                {
+                    Thread.Sleep(500);
+                }
+            };
+            var startYoutube = new BaseScriptComponent()
             {
                 action = () =>
                 {
@@ -62,7 +129,7 @@ namespace Code.Utils.Story
                     Thread.Sleep(500);
                 }
             };
-            var clickSubrice = new BaseScript()
+            var clickSubrice = new BaseScriptComponent()
             {
                 canAction = () =>
                 {
@@ -95,9 +162,9 @@ namespace Code.Utils.Story
             return script.RunScript();
         }
 
-        private BaseScript switchAccountGoogle()
+        private BaseScriptComponent switchAccountGoogle()
         {
-            return new BaseScript()
+            return new BaseScriptComponent()
             {
                 init = () =>
                 {

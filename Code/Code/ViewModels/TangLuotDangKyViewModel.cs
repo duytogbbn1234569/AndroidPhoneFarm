@@ -1,4 +1,5 @@
-﻿using Code.Utils.Story;
+﻿using Code.Models;
+using Code.Utils.Story;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,6 +96,18 @@ namespace Code.ViewModels
         protected override void QuanLyCongViecChoCacThietBi(List<string> thietbi, long soLanLap)
         {
             soLanLap = SoLuotTang;
+            var tbs = thietbi.ToHashSet();
+            foreach (var tb in thietbi)
+            {
+                emailOfDevice[tb] = new List<string>();
+            }
+            foreach (var ac in DataProvider.Ins.db.TaiKhoanGoogles)
+            {
+                if (tbs.Contains(ac.IDThietBi.Trim()))
+                {
+                    emailOfDevice[ac.IDThietBi.Trim()].Add(ac.TenDangNhap);
+                }
+            }
             base.QuanLyCongViecChoCacThietBi(thietbi, soLanLap);
         }
         protected override void ExecuteShowPopUpWindow(object obj)
@@ -143,11 +156,19 @@ namespace Code.ViewModels
             {
                 MessageBox.Show("Thông tin nhập sai vui lòng nhập lại");
             }
-           
         }
+
+        private Dictionary<String, List<String>> emailOfDevice = new Dictionary<string, List<string>>();
+
         protected override BaseScript createScriptToRun(string thietbiId, string url)
         {
-            return new DangKyKenhYoutubeScript(thietbiId, url);
+            var email = emailOfDevice[thietbiId].LastOrDefault();
+            if (email == null)
+            {
+                return null;
+            }
+            emailOfDevice[thietbiId].RemoveAt(emailOfDevice[thietbiId].Count() - 1);
+            return new DangKyKenhYoutubeScript(thietbiId, url, email);
         }
         protected override string getCurrentUrl()
         {

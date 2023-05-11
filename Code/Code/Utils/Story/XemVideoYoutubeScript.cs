@@ -16,16 +16,17 @@ namespace Code.Utils.Story
         private readonly string youtube = "com.google.android.youtube";
         private readonly string url;
         private readonly int thoiGianXem;
+
         public XemVideoYoutubeScript(string deviceId, string url, int thoiGianXem) : base()
         {
             this.url = url;
             this.thoiGianXem = thoiGianXem;
             this.adb = new ADBUtils(deviceId);
         }
-        public override bool RunScript()
+        protected override bool IsCompleted()
         {
-            var script = new BaseScript();
-            var stopAcivity = new BaseScript()
+            var script = new BaseScriptComponent();
+            var stopAcivity = new BaseScriptComponent()
             {
                 action = () =>
                 {
@@ -36,7 +37,7 @@ namespace Code.Utils.Story
                     Thread.Sleep(500);
                 }
             };
-            var startYoutube = new BaseScript()
+            var startYoutube = new BaseScriptComponent()
             {
                 action = () =>
                 {
@@ -48,7 +49,7 @@ namespace Code.Utils.Story
                     Thread.Sleep(500);
                 }
             };
-            var skipAdv = new BaseScript()
+            var skipAdv = new BaseScriptComponent()
             {
                 init = () =>
                 {
@@ -89,7 +90,7 @@ namespace Code.Utils.Story
                     }
                 }
             };
-            var wait = new BaseScript()
+            var wait = new BaseScriptComponent()
             {
                 init = () =>
                 {

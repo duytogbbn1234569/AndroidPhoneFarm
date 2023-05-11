@@ -15,18 +15,21 @@ namespace Code.Utils
         public readonly static string path = "adb.exe";
 
         private readonly string deviceId;
-        private readonly string trangThai;
 
-        public ADBUtils(string deviceId)
+        private readonly bool throwExceptionOnError;
+
+        public ADBUtils(string deviceId, bool throwExceptionOnError = false)
         {
             this.deviceId = deviceId;
+            this.throwExceptionOnError = throwExceptionOnError;
         }
 
-        public static string RunAdbCommand(string cmd, bool needOutput = false)
+        public static string RunAdbCommand(string cmd, bool needOutput = false, bool throwExceptionOnError = false)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = true;
             startInfo.RedirectStandardOutput = needOutput;
+            startInfo.RedirectStandardError = throwExceptionOnError;
             startInfo.FileName = ADBUtils.path;
             startInfo.Arguments = cmd;
             startInfo.UseShellExecute = false;
@@ -34,17 +37,26 @@ namespace Code.Utils
             process.StartInfo = startInfo;
             process.Start();
             string output = "";
+            string error = "";
             if (needOutput)
             {
                 output = process.StandardOutput.ReadToEnd();
             }
+            if (throwExceptionOnError)
+            {
+                error = process.StandardError.ReadToEnd();
+            }
             process.WaitForExit();
+            if (error != "")
+            {
+                throw new AdbException(cmd, error);
+            }
             return output;
         }
 
         public string runAdbCommand(string cmd, bool needOutput = false)
         {
-            return RunAdbCommand(String.Format("-s {0} {1}", this.deviceId, cmd), needOutput);
+            return RunAdbCommand(String.Format("-s {0} {1}", this.deviceId, cmd), needOutput, this.throwExceptionOnError);
         }
 
         public string getCurrentView()
@@ -107,6 +119,26 @@ namespace Code.Utils
         public void startIntent(string intent, string url)
         {
             runAdbCommand(String.Format("shell am start -a {0} {1}", intent, url));
+        }
+    }
+
+    class AdbException: Exception
+    {
+        private readonly string command;
+        private readonly string errorMessage;
+
+        public AdbException(string command, string errorOutput): base()
+        {
+            this.command = command;
+            this.errorMessage = errorOutput;
+        }
+
+        public override string Message
+        {
+            get
+            {
+                return "ADB:ERROR:COMMAND = " + command + ", ERROR = " + errorMessage;
+            }
         }
     }
 

@@ -11,23 +11,6 @@ using System.Threading.Tasks;
 
 namespace Code.Models
 {
-    public class ThongTinThietBi
-    {
-        public string id;
-        public bool trangThai
-        {
-            set
-            {
-                
-            }
-        }
-        private HashSet<string> thietBiDuocSuDung = new HashSet<string>();
-
-        public ThongTinThietBi(HashSet<string> set)
-        {
-
-        }
-    }
     public class ThietBi
     {
         public List<string> danhSachThietBi = new List<string>();

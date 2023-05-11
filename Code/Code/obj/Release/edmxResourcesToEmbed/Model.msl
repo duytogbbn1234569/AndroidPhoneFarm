@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PhoneFarmModelStoreContainer" CdmEntityContainer="PhoneFarmEntities">
+    <EntitySetMapping Name="TaiKhoanFacebooks">
+      <EntityTypeMapping TypeName="PhoneFarmModel.TaiKhoanFacebook">
+        <MappingFragment StoreEntitySet="TaiKhoanFacebook">
+          <ScalarProperty Name="IDTaiKhoanF" ColumnName="IDTaiKhoanF" />
+          <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
+          <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+          <ScalarProperty Name="Ho" ColumnName="Ho" />
+          <ScalarProperty Name="Ten" ColumnName="Ten" />
+          <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
+          <ScalarProperty Name="ThangSinh" ColumnName="ThangSinh" />
+          <ScalarProperty Name="NamSinh" ColumnName="NamSinh" />
+          <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
+          <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+          <ScalarProperty Name="IDThietBi" ColumnName="IDThietBi" />
+          <ScalarProperty Name="IDTaiKhoanG" ColumnName="IDTaiKhoanG" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TaiKhoanGoogles">
+      <EntityTypeMapping TypeName="PhoneFarmModel.TaiKhoanGoogle">
+        <MappingFragment StoreEntitySet="TaiKhoanGoogle">
+          <ScalarProperty Name="IDTaiKhoanG" ColumnName="IDTaiKhoanG" />
+          <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
+          <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+          <ScalarProperty Name="Ho" ColumnName="Ho" />
+          <ScalarProperty Name="Ten" ColumnName="Ten" />
+          <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
+          <ScalarProperty Name="ThangSinh" ColumnName="ThangSinh" />
+          <ScalarProperty Name="NamSinh" ColumnName="NamSinh" />
+          <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
+          <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+          <ScalarProperty Name="IDThietBi" ColumnName="IDThietBi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

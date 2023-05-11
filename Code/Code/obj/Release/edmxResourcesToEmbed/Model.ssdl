@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PhoneFarmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="TaiKhoanFacebook">
+    <Key>
+      <PropertyRef Name="IDTaiKhoanF" />
+    </Key>
+    <Property Name="IDTaiKhoanF" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenDangNhap" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="MatKhau" Type="nchar" MaxLength="25" Nullable="false" />
+    <Property Name="Ho" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="Ten" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="NgaySinh" Type="int" Nullable="false" />
+    <Property Name="ThangSinh" Type="int" Nullable="false" />
+    <Property Name="NamSinh" Type="int" Nullable="false" />
+    <Property Name="GioiTinh" Type="int" Nullable="false" />
+    <Property Name="TrangThai" Type="int" Nullable="false" />
+    <Property Name="IDThietBi" Type="nchar" MaxLength="25" Nullable="false" />
+    <Property Name="IDTaiKhoanG" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TaiKhoanGoogle">
+    <Key>
+      <PropertyRef Name="IDTaiKhoanG" />
+    </Key>
+    <Property Name="IDTaiKhoanG" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TenDangNhap" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="MatKhau" Type="nchar" MaxLength="25" Nullable="false" />
+    <Property Name="Ho" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="Ten" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="NgaySinh" Type="int" Nullable="false" />
+    <Property Name="ThangSinh" Type="int" Nullable="false" />
+    <Property Name="NamSinh" Type="int" Nullable="false" />
+    <Property Name="GioiTinh" Type="int" Nullable="false" />
+    <Property Name="TrangThai" Type="int" Nullable="false" />
+    <Property Name="IDThietBi" Type="nchar" MaxLength="25" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_TaiKhoanFacebook_ToTable">
+    <End Role="TaiKhoanGoogle" Type="Self.TaiKhoanGoogle" Multiplicity="1" />
+    <End Role="TaiKhoanFacebook" Type="Self.TaiKhoanFacebook" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TaiKhoanGoogle">
+        <PropertyRef Name="IDTaiKhoanG" />
+      </Principal>
+      <Dependent Role="TaiKhoanFacebook">
+        <PropertyRef Name="IDTaiKhoanG" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PhoneFarmModelStoreContainer">
+    <EntitySet Name="TaiKhoanFacebook" EntityType="Self.TaiKhoanFacebook" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TaiKhoanGoogle" EntityType="Self.TaiKhoanGoogle" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_TaiKhoanFacebook_ToTable" Association="Self.FK_TaiKhoanFacebook_ToTable">
+      <End Role="TaiKhoanGoogle" EntitySet="TaiKhoanGoogle" />
+      <End Role="TaiKhoanFacebook" EntitySet="TaiKhoanFacebook" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

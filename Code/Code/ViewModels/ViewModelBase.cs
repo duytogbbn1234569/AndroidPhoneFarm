@@ -59,6 +59,7 @@ namespace Code.ViewModels
                 public static TrangThai DANG_CHAY = new TrangThai("Đang chạy");
                 public static TrangThai THANH_CONG = new TrangThai("Thành công");
                 public static TrangThai THAT_BAI = new TrangThai("Thất bại");
+                public static TrangThai KHONG_HO_TRO = new TrangThai("Thiết bị không thể thực hiện hành động");
             }
             public int Stt
             {
@@ -193,7 +194,14 @@ namespace Code.ViewModels
                         }
                         jobThreads[nextIndex] = new Thread(new ThreadStart(() =>
                         {
-                            ThucHienCongViecTrenThietBi(thietbi[nextIndex], url);
+                            var tb = thietbi[nextIndex];
+                            if (!ThucHienCongViecTrenThietBi(tb, url))
+                            {
+                                var ind = thietbi.IndexOf(tb);
+                                thietBi.setUse(tb, false);
+                                thietbi.RemoveAt(ind);
+                                jobThreads.RemoveAt(ind);
+                            }
                         }));
                         jobThreads[nextIndex].Start();
                     }
@@ -268,16 +276,28 @@ namespace Code.ViewModels
 
         private Mutex themDongChoBangMutex = new Mutex();
 
-        protected virtual void ThucHienCongViecTrenThietBi(string idThietBi, string url)
+        protected virtual bool ThucHienCongViecTrenThietBi(string idThietBi, string url)
         {
+            var job = createScriptToRun(idThietBi, url);
+            DeviceStatus status;
+            if (job == null)
+            {
+                themDongChoBangMutex.WaitOne();
+                status = new DeviceStatus { Stt = devices.Count + 1, DeviceId = idThietBi, Status = DeviceStatus.TrangThai.KHONG_HO_TRO, Url = url };
+                mainDispatcher.Invoke(() =>
+                {
+                    devices.Add(status);
+                });
+                themDongChoBangMutex.ReleaseMutex();
+                return false;
+            }
             themDongChoBangMutex.WaitOne();
-            var status = new DeviceStatus { Stt = devices.Count + 1, DeviceId = idThietBi, Status = DeviceStatus.TrangThai.DANG_CHAY, Url = url };
+            status = new DeviceStatus { Stt = devices.Count + 1, DeviceId = idThietBi, Status = DeviceStatus.TrangThai.DANG_CHAY, Url = url };
             mainDispatcher.Invoke(() =>
             {
                 devices.Add(status);
             });
             themDongChoBangMutex.ReleaseMutex();
-            var job = createScriptToRun(idThietBi, url);
             try
             {
                 if (job.RunScript())
@@ -291,11 +311,20 @@ namespace Code.ViewModels
                     TangThatBai();
                 }
             }
+            catch (AdbException ex)
+            {
+                status.Status = DeviceStatus.TrangThai.THAT_BAI;
+                job.OnTerminateOrPause();
+                Console.WriteLine(ex.Message);
+                TangThatBai();
+            }
             catch (Exception ex)
             {
                 status.Status = DeviceStatus.TrangThai.THAT_BAI;
+                job.OnTerminateOrPause();
                 TangThatBai();
             }
+            return true;
         }
 
         protected virtual string getCurrentUrl()
